@@ -1,9 +1,8 @@
 from whitenoise import WhiteNoise
 import os
 
-#config_name = os.environ.get('FLASK_CONFIG') or 'production_heroku'
-
-#config_name = os.environ.get('FLASK_CONFIG') or 'production_heroku'
+#only for local testing via $ heroku local web
+#config_name = os.environ.get('FLASK_CONFIG') or 'production'
 
 config_name = os.environ.get('FLASK_CONFIG') or 'production_heroku' 
 

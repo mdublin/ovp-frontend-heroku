@@ -67,6 +67,8 @@ def create_app(config_name):
    
     #below was originally executed in run.py when only using Flask server, changed for Gunicorn update
     #registering this app instance with the db and mapping schema defined in models.py to db via SQLAlchemy introspection funtionality (create_all() looks for any child instances inheriting from the parent SQLAlchemy instance, in this case in models.py db.Model)
+    #if we do not utilize app_context() from the app instance object, and register it with the db by creating the db (more specifically mapping our db schema defined in models.py to the psql database we create via $ createdb VideoDashBoard) within the content of the particular current app instance, we get the following error:
+    #RuntimeError: application not registered on db instance and no application bound to current context
 
     with app.app_context():
         db.create_all()
