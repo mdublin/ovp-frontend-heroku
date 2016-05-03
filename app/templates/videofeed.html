@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+<!-- http://codepen.io/ncerminara/pen/zbKAD/ --!>
+{% block title %}Video Feed{% endblock %}
+
+{% block page_content %}
+    <h1>Video Feed</h1>
+    <p>This page can only be viewed by logged in users.</p>
+    <p>You are logged in as <b>{{ current_user.username }}</b>.</p>
+ 
+    <!--here we will loop through video feed returned after user-submitted tag interpolation with OVP API feed has been processed by video feed processing logic elsewhere in app --!>
+ 
+ {% for dict in video_package %}
+    
+
+       <div class="embed-responsive embed-responsive-16by9">
+ 
+ <!-- Start of Brightcove Player -->
+<div style="display:none">
+    
+</div>
+
+<!--
+ By use of this code snippet, I agree to the Brightcove Publisher T and C
+ found at https://accounts.brightcove.com/en/terms-and-conditions/.
+ -->
+
+<script language="JavaScript" type="text/javascript" src="http://admin.brightcove.com/js/BrightcoveExperiences.js"></script>
+
+<object id="myExperience" class="BrightcoveExperience">
+    <param name="bgcolor" value="#FFFFFF" />
+    <param name="width" value="480" />
+    <param name="height" value="270" />
+    <param name="playerID" value="4239069402001" />
+    <param name="playerKey" value="AQ~~,AAAABvaL8JE~,ufBHq_I6FnwfOMZXBanuA9ZRv9kTOlTe" />
+    <param name="isVid" value="true" />
+    <param name="isUI" value="true" />
+    <param name="dynamicStreaming" value="true" />
+    <param name="@videoPlayer" value="{{ dict["videoID"] }}" />
+    
+</object>
+
+<!--
+ This script tag will cause the Brightcove Players defined above it to be created as soon
+ as the line is read by the browser. If you wish to have the player instantiated only after
+ the rest of the HTML is processed and the page load is complete, remove the line.
+ -->
+<script type="text/javascript">brightcove.createExperiences();</script>
+
+<!-- End of Brightcove Player -->
+
+</div>
+
+<!-- 
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Get Info<span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+     -->
+
+
+     <!-- Button trigger modal -->
+     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+       Get Asset Data
+     </button>
+
+       <!-- Modal -->
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+           <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+           </div>
+           <div class="modal-body">
+             ...
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+         </div>
+        </div>
+       </div>
+
+
+{% endfor %}
+
+{% endblock %}

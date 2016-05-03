@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Login Example{% endblock %}
+
+
+{% block page_content %}
+<body background="{{ url_for('static', filename = 'whtntv4.jpg') }}"> 
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+        href="{{url_for('static', filename='newstyle.css')}}">
+    {% endblock %}
+    <textblock>
+    <h1>Video Search</h1>
+    <p>This page can only be viewed by logged in users.</p>
+    <p>You are logged in as <b>{{ current_user.username }}</b>.</p>
+    <p>*Separate tags with a comma; no tag > 128 characters</p>
+    </textblock>
+       <div class="row">
+           <div class="col-md-3">
+               {{ wtf.quick_form(tagform) }}
+           </div>
+       </div> 
+
+
+{% endblock %}

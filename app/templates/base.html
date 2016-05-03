@@ -1,0 +1,40 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Video CMS Dashboard{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+
+            {% block styles %}
+            {{super()}}
+            <link rel="stylesheet"
+                  href="{{url_for('static', filename='newstyle.css')}}">
+           {% endblock %}
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <newnav>Video CMS Dashboard</newnav>
+            </a>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.index') }}"><newnav2>Home</newnav2></a></li>
+                <li><a href="{{ url_for('main.register') }}"><newnav2>Register</newnav2></a><li>
+                <li><a href="{{ url_for('main.protected') }}"><newnav2>Protected</newnav2></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.logout') }}"><newnav3>Logout</newnav3></a>
+                    {% else %}
+                    <a href="{{ url_for('main.login') }}"><newnav3>Login</newnav3></a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div> 
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% block page_content %}{% endblock %}
+    </div>
+{% endblock %}
