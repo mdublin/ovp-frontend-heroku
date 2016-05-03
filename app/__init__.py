@@ -64,5 +64,10 @@ def create_app(config_name):
     #    mail_handler.setLevel(logging.ERROR)
     #    app.logger.addHandler(mail_handler)
     
+   
+    #below was originally executed in run.py when only using Flask server, changed for Gunicorn update
+    #registering this app instance with the db and mapping schema defined in models.py to db via SQLAlchemy introspection funtionality (create_all() looks for any child instances inheriting from the parent SQLAlchemy instance, in this case in models.py db.Model)
 
+    with app.app_context():
+        db.create_all()
     return app
