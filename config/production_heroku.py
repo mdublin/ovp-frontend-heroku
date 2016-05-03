@@ -21,5 +21,6 @@ conn = pyscopg2.connect(
         port=url.port
 )
 
-SQLALCHEMY_DATABASE_URI = conn
+SQLALCHEMY_DATABASE_URI = url
+
 
