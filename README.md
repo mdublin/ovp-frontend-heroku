@@ -9,10 +9,10 @@ Some userful Heroku commands:
 
     Logging:
 
-    `heroku logs --tail`
+    heroku logs --tail
 
-    Access the shell of your installation:
+    Access the shell of your one-off dyno:
 
-    `heroku run bash`
+    heroku run bash
 
 
