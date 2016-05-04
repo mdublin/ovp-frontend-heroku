@@ -2,6 +2,8 @@
 
 {% import "bootstrap/wtf.html" as wtf %}
 <!-- http://codepen.io/ncerminara/pen/zbKAD/ --!>
+
+    
 {% block title %}Video Feed{% endblock %}
 
 {% block page_content %}
@@ -68,6 +70,7 @@
 
      <!-- adding loop.index to make the ID attributes unique across the entire document for data-target and id--!>
      <!-- http://stackoverflow.com/questions/36959602/understanding-unexpected-jinja2-control-structure-iteration/37017857#37017857 --!>
+
      <!-- Button trigger modal -->
      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal--{{loop.index}}">
        Get Asset Data
@@ -84,7 +87,23 @@
            <div class="modal-body">
                <p><b>DESCRIPTION:</b> {{ dict["description"] }}</p>
                <p><b>TAGS:</b> {{ dict["tags"] }}</p>
-               <p><b>SOURCE FILE URL:</b> {{ dict["url"] }}</p>
+
+               <!--<button class="btn" data-clipboard-action="copy" data-clipboard-target={{ dict["url"] }}>Copy Source File Url</button> --! >
+               <!-- clipboard.js button for video source file URL --!>
+               <button class="btn" data-clipboard-text={{ dict["url"] }}>Copy Source File Url</button> 
+               <script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
+               <script>
+               var clipboard = new Clipboard('.btn');
+
+               clipboard.on('success', function(e) {
+                   console.log(e);
+               });
+               clipboard.on('error', function(e) {
+                   console.log(e);
+               });
+               </script>
+               <!-- END of clipboard.js button for video source file URL --!> 
+
            </div>
            <div class="modal-footer">
              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
