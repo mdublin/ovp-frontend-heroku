@@ -17,4 +17,9 @@ Some userful Heroku commands:
 
     heroku run bash
 
+Also, if you want to work on the same repository that is for the same Heroku app, you need to connect the repository copies on your other machines to the same app via: 
+
+$ heroku git:remote -a yourappname
+
+The other way to get the actual repository that's used for the app is to git clone it from the Heroku dashboard, but that won't actually be connected to your github repository version unless you create a new github repository, push it, etc. 
 
