@@ -56,6 +56,9 @@ def load(parser_input):
         max_bitrate = 0
         vid_url = None
         videos = post.media_content
+        tags = post.media_keywords
+        print(tags)
+
 
         # -- For each video in the item dict
         for video in videos:
@@ -75,6 +78,7 @@ def load(parser_input):
         # print "{} url {}".format(max_bitrate, vid_url)
         # print "highest bitrate {} url {}".format(max_bitrate, vid_url)
 
+        item['tags'] = tags
         item['url'] = vid_url
         videoID = item['videoID']
         # new line
@@ -120,10 +124,13 @@ def load(parser_input):
         video_package = {}
         print("THIS IS ASSET_DICT on line 100")
         print(asset_dict)
+        extract_sourcefile_tupe = asset_dict['url']
         extract_videoID_tupe = asset_dict['videoID'] 
         extract_name_tupe = asset_dict['name']   
         extract_description_tupe = asset_dict['description']
-        video_package.update({'videoID': extract_videoID_tupe[0], 'name': extract_name_tupe[0], 'description': extract_description_tupe[0]})
+        extract_tags_tupe = asset_dict['tags']
+
+        video_package.update({'videoID': extract_videoID_tupe[0], 'name': extract_name_tupe[0], 'description': extract_description_tupe[0], 'tags': extract_tags_tupe, 'url': extract_sourcefile_tupe})
         asset_return_list.append(video_package)
 
     print(asset_return_list)
