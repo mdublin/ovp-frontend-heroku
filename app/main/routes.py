@@ -54,9 +54,6 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         User.register(form.username.data, form.email.data, form.password.data)
-        #user = User(form.username.data, form.email.data, form.password.data)
-        #db_session.add(user)
-        #db.add(user)
         flash('Thanks for registering')
         return redirect(url_for('main.login'))
     return render_template('register.html', form=form)
@@ -88,10 +85,10 @@ def videosearch():
         video_package = video_feed_parser.load(parser_input)
         #send video_package to search result db
         #return render_template('videofeed.html', video_package=video_package)
+        
 
 
     return render_template('videosearch.html', tagform=tagform)
-
 
 
 

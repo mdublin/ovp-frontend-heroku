@@ -29,10 +29,28 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.username)
 
+
 # loads user from database
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+
+
+class SearchResult(db.Model):
+    __tablename__ = 'searchresults'
+    id = db.Column(db.Integer, primary_key=True)
+    videopackage = db.Column(db.PickleType, index=True)
+    
+    @staticmethod
+    def store(asset_return_list):
+        #parse through list of dicts that contain video asset data
+        for item in asset_return_list:
+            searchresult = SearchResult(videopackage=item)
+            db.session.add(searchresult)
+            db.session.commit()
+
 
 
 # Some notes of how SQLAlchemy is working in this app, which is kind of magical so it warrants some explicit break:

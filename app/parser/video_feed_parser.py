@@ -6,8 +6,10 @@ import requests
 import feedparser
 import json
 
-#receiving user_tag text submitted by user via TagSearchForm on http://127.0.0.1:5000/protected
+from ..models import SearchResult  
 
+
+#receiving user_tag text submitted by user via TagSearchForm on http://127.0.0.1:5000/protected
 def load(parser_input):
 
     print("THIS IS parser_input")
@@ -96,28 +98,6 @@ def load(parser_input):
         # print "this is type check of tuple extract on line 70: %s" % foo
         videoDescription = item['description']
 
-
-        #print(response_array)
-        #print(type(response_array))
-
-
-        
-        '''asset_dict = response_array[0]
-        print("THIS IS ASSET_DICT")
-        print(asset_dict)
-        
-        extract_videoID_tupe = asset_dict['videoID']
-        extract_name_tupe = asset_dict['name']
-        extract_description_tupe = asset_dict['description']
-        
-        # all the values are at index 0 of each tuple, tuples are the values for each key in dictionary contained in the response_array list 
-        video_package = {}
-        video_package.update({'videoID': extract_videoID_tupe, 'name': extract_name_tupe, 'description': extract_description_tupe})
-        print("printing video_package....")
-        print(video_package)
-        asset_return_list.append(video_package)
-
-        #return extract_videoID_tupe[0]'''
     
     #video_package = {}
     for asset_dict in response_array:
@@ -134,6 +114,10 @@ def load(parser_input):
         asset_return_list.append(video_package)
 
     print(asset_return_list)
+
+    #send results to db
+    SearchResult.store(asset_return_list)
+    
     return asset_return_list
 
 
