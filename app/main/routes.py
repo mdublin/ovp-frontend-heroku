@@ -86,6 +86,7 @@ def videosearch():
         #send video_package to search result db
         #return render_template('videofeed.html', video_package=video_package)
         
+        #delete entries in db after pages are created? delete entries after user session is done?
 
 
     return render_template('videosearch.html', tagform=tagform)
