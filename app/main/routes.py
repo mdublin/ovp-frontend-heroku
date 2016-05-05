@@ -70,10 +70,29 @@ def index():
 
 
 # videofeed route
-@main.route('/videofeed')
+#@main.route('/videofeed')
 #@app.route('/videofeed')
-def videofeed(video_id):
-    return render_template('videofeed.html', video_id=video_id)
+#def videofeed(video_id):
+#    return render_template('videofeed.html', video_id=video_id)
+
+
+
+@main.route('/videosearch', methods=['GET', 'POST'])
+@login_required
+def videosearch():
+    tagform = TagSearchForm()
+
+    if tagform.validate_on_submit():
+        user_tag = tagform.tag.data
+        parser_input = input_cleanup.input_prep(user_tag)
+        video_package = video_feed_parser.load(parser_input)
+        #send video_package to search result db
+        #return render_template('videofeed.html', video_package=video_package)
+
+
+    return render_template('videosearch.html', tagform=tagform)
+
+
 
 
 #@main.route('/protected')
@@ -99,8 +118,9 @@ def protected():
         #video_package = video_feed_parser.load(user_tag)
         # print(video_package)
 
-        # call to input_cleanup function before sending to parser
+        # send user-submitted text to input_cleanup function before sending to parser
         parser_input = input_cleanup.input_prep(user_tag)
+        #sending return value of parser_input to the feed parser
         video_package = video_feed_parser.load(parser_input)
 
        # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
@@ -112,3 +132,6 @@ def protected():
         # return redirect(url_for('main.videofeed', video_id=video_id))
 
     return render_template('protected.html', tagform=tagform)
+
+
+
