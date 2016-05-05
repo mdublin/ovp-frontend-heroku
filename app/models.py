@@ -39,6 +39,9 @@ def load_user(id):
 
 
 class SearchResult(db.Model):
+    ''' uses PickleType to store serialized data structures in table column
+    http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.PickleType
+    '''
     __tablename__ = 'searchresults'
     id = db.Column(db.Integer, primary_key=True)
     videopackage = db.Column(db.PickleType, index=True)
