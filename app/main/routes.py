@@ -13,6 +13,7 @@ from . import main
 from .forms import LoginForm, TagSearchForm, RegistrationForm
 from ..parser import video_feed_parser, input_cleanup
 
+RESULTS_PER_PAGE = 20
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -99,6 +100,20 @@ def videosearch():
 #    return render_template('protected.html')
 
 # new:
+@main.route('/feed/<user_tag>', methods=['GET'])
+@login_required
+def feed(user_tag):
+    page = request.params.get('page', 1)
+    parser_input = input_cleanup.input_prep(user_tag)
+    #sending return value of parser_input to the feed parser
+    video_package = video_feed_parser.load(parser_input, page, RESULTS_PER_PAGE)
+
+    # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
+    # return render_template('videofeed.html', video_id=video_id)
+
+
+    return render_template('videofeed.html', video_package=video_package, page=page, tag=user_tag)
+
 @main.route('/protected', methods=['GET', 'POST'])
 @login_required
 def protected():
@@ -117,14 +132,7 @@ def protected():
         # print(video_package)
 
         # send user-submitted text to input_cleanup function before sending to parser
-        parser_input = input_cleanup.input_prep(user_tag)
-        #sending return value of parser_input to the feed parser
-        video_package = video_feed_parser.load(parser_input)
-
-       # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
-        # return render_template('videofeed.html', video_id=video_id)
-
-        return render_template('videofeed.html', video_package=video_package)
+        return redirect(url_for('feed', user_tag))
 
         # return redirect(url_for('main.videofeed', video_id=video_id))
         # return redirect(url_for('main.videofeed', video_id=video_id))

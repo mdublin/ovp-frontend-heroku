@@ -10,7 +10,7 @@ from ..models import SearchResult
 
 
 #receiving user_tag text submitted by user via TagSearchForm on http://127.0.0.1:5000/protected
-def load(parser_input):
+def load(parser_input, page, results_per_page):
 
     print("THIS IS parser_input")
     print(parser_input)
@@ -42,7 +42,7 @@ def load(parser_input):
     asset_return_list = []
     
     # -- For each item in the feed
-    for index, post in enumerate(d.entries):
+    for index, post in enumerate(d.entries[(page - 1)*results_per_page:page*results_per_page+results_per_page]):
         if index >= 3:
             break
         # Here we set up a dictionary in order to extract selected data from the
