@@ -23,3 +23,10 @@ $ heroku git:remote -a yourappname
 
 The other way to get the actual repository that's used for the app is to git clone it from the Heroku dashboard, but that won't actually be connected to your github repository version unless you create a new github repository, push it, etc. 
 
+
+
+For local dev, sometimes port gets stuck -- to find offending port:
+
+$ lsof -n -i4TCP:8000 | grep LISTEN
+
+

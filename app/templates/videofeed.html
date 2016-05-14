@@ -77,10 +77,11 @@
      </button>
 
      {% if page > 1 %}
-     <a href="{% url_for('feed', user_tag={{ tag }}, page={{ page - 1 }}) %}">Previous</a>
+	 <a href="{{ url_for('main.feed', user_tag=tag, page=(page - 1))}}">Previous</a>
      {% endif %}
-     <a href="{% url_for('feed', user_tag={{ tag }}, page={{ page + 1 }}) %}">Next</a>
-       <!-- Modal -->
+	 <a href="{{ url_for('main.feed', user_tag=tag, page=(page + 1 )) }}">Next</a>
+ 
+	 <!-- Modal -->
        <div class="modal fade" id="myModal--{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
          <div class="modal-content">

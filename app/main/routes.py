@@ -13,7 +13,7 @@ from . import main
 from .forms import LoginForm, TagSearchForm, RegistrationForm
 from ..parser import video_feed_parser, input_cleanup
 
-RESULTS_PER_PAGE = 20
+RESULTS_PER_PAGE = 5
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -103,8 +103,10 @@ def videosearch():
 @main.route('/feed/<user_tag>', methods=['GET'])
 @login_required
 def feed(user_tag):
-    page = request.params.get('page', 1)
+    page = request.args.get('page', 1)
     parser_input = input_cleanup.input_prep(user_tag)
+    #converting page from Unicode to int for passing to d.entries slice operation in load()
+    page = int(page)
     #sending return value of parser_input to the feed parser
     video_package = video_feed_parser.load(parser_input, page, RESULTS_PER_PAGE)
 
@@ -113,6 +115,7 @@ def feed(user_tag):
 
 
     return render_template('videofeed.html', video_package=video_package, page=page, tag=user_tag)
+
 
 @main.route('/protected', methods=['GET', 'POST'])
 @login_required
@@ -132,12 +135,13 @@ def protected():
         # print(video_package)
 
         # send user-submitted text to input_cleanup function before sending to parser
-        return redirect(url_for('feed', user_tag))
+        return redirect(url_for('main.feed', user_tag=user_tag))
+
 
         # return redirect(url_for('main.videofeed', video_id=video_id))
         # return redirect(url_for('main.videofeed', video_id=video_id))
-
     return render_template('protected.html', tagform=tagform)
+
 
 
 

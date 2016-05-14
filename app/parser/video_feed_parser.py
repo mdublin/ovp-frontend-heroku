@@ -2,25 +2,26 @@
 # -*- coding: utf-8 -*-
 
 print "Content-type: application/json\n\n"
-import requests
 import feedparser
 import json
 
-from ..models import SearchResult  
+from ..models import SearchResult
 
 
-#receiving user_tag text submitted by user via TagSearchForm on http://127.0.0.1:5000/protected
+# receiving user_tag text submitted by user via TagSearchForm on
+# http://127.0.0.1:5000/protected
 def load(parser_input, page, results_per_page):
 
     print("THIS IS parser_input")
     print(parser_input)
     print(type(parser_input))
 
-    #checking parser_input object type
+    # checking parser_input object type
     if isinstance(parser_input, str):
-        video_feed = 'http://api.brightcove.com/services/library?command=search_videos&any=tag:{}&output=mrss&media_delivery=http&sort_by=CREATION_DATE:DESC&token=8-XmRYT4C6VKYvvCGoJhcaGFX-t7ZO-ML3eXD95oalq6obm5ho7eJg..'.format(parser_input)
-    
-    #for multiple tags
+        video_feed = 'http://api.brightcove.com/services/library?command=search_videos&any=tag:{}&output=mrss&media_delivery=http&sort_by=CREATION_DATE:DESC&token=8-XmRYT4C6VKYvvCGoJhcaGFX-t7ZO-ML3eXD95oalq6obm5ho7eJg..'.format(
+            parser_input)
+
+    # for multiple tags
     else:
         tags_insert = ""
         for tag in parser_input:
@@ -29,26 +30,34 @@ def load(parser_input, page, results_per_page):
         print("THIS IS tags_insert:")
         print(tags_insert)
 
-        video_feed = 'http://api.brightcove.com/services/library?command=search_videos{}&output=mrss&media_delivery=http&sort_by=CREATION_DATE:DESC&token=8-XmRYT4C6VKYvvCGoJhcaGFX-t7ZO-ML3eXD95oalq6obm5ho7eJg..'.format(tags_insert)
-     
+        video_feed = 'http://api.brightcove.com/services/library?command=search_videos{}&output=mrss&media_delivery=http&sort_by=CREATION_DATE:DESC&token=8-XmRYT4C6VKYvvCGoJhcaGFX-t7ZO-ML3eXD95oalq6obm5ho7eJg..'.format(
+            tags_insert)
+
     print("THIS IS video_feed:")
     print(video_feed)
-    
+
     d = feedparser.parse(video_feed)
 
     response_array = []
 
-    # list returned of dicts for each video, this will be sent to, and iterated through, videofeed.html endpoint with jinja2 control structures
+    # list returned of dicts for each video, this will be sent to, and
+    # iterated through, videofeed.html endpoint with jinja2 control structures
     asset_return_list = []
-    
+
+    print("THIS IS PAGE: ")
+    print(page)
+    print(type(page))
+
     # -- For each item in the feed
-    for index, post in enumerate(d.entries[(page - 1)*results_per_page:page*results_per_page+results_per_page]):
-        if index >= 3:
+    for index, post in enumerate(
+            d.entries[
+            (page - 1) * results_per_page:page * results_per_page + results_per_page]):
+        if index >= 100:
             break
         # Here we set up a dictionary in order to extract selected data from the
         # original brightcove "post" result
         item = {}
-        
+
         item['name'] = post.title,
         item['description'] = post.description,
         item['url'] = u"%s" % post.link,
@@ -60,7 +69,6 @@ def load(parser_input, page, results_per_page):
         videos = post.media_content
         tags = post.media_keywords
         print(tags)
-
 
         # -- For each video in the item dict
         for video in videos:
@@ -98,26 +106,29 @@ def load(parser_input, page, results_per_page):
         # print "this is type check of tuple extract on line 70: %s" % foo
         videoDescription = item['description']
 
-    
     #video_package = {}
     for asset_dict in response_array:
         video_package = {}
         print("THIS IS ASSET_DICT on line 100")
         print(asset_dict)
         extract_sourcefile_tupe = asset_dict['url']
-        extract_videoID_tupe = asset_dict['videoID'] 
-        extract_name_tupe = asset_dict['name']   
+        extract_videoID_tupe = asset_dict['videoID']
+        extract_name_tupe = asset_dict['name']
         extract_description_tupe = asset_dict['description']
         extract_tags_tupe = asset_dict['tags']
 
-        video_package.update({'videoID': extract_videoID_tupe[0], 'name': extract_name_tupe[0], 'description': extract_description_tupe[0], 'tags': extract_tags_tupe, 'url': extract_sourcefile_tupe})
+        video_package.update(
+            {
+                'videoID': extract_videoID_tupe[0],
+                'name': extract_name_tupe[0],
+                'description': extract_description_tupe[0],
+                'tags': extract_tags_tupe,
+                'url': extract_sourcefile_tupe})
         asset_return_list.append(video_package)
 
     print(asset_return_list)
 
-    #send results to db
+    # send results to db
     SearchResult.store(asset_return_list)
-    
+
     return asset_return_list
-
-
