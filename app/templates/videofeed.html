@@ -8,9 +8,20 @@
 
 {% block page_content %}
     <h1>Video Feed</h1>
-    <p>This page can only be viewed by logged in users.</p>
-    <p>You are logged in as <b>{{ current_user.username }}</b>.</p>
- 
+	<p>you are logged in as <b>{{ current_user.username }}</b>.</p>
+
+	<!-- using Bootstrap pagination http://getbootstrap.com/components/#pagination --!>
+	<!-- pagination conditional, adding previous button if the current page object is == to more than 1, else just Next appears. --!>
+	<nav>
+		<ul class="pager">
+		{% if page > 1 %}
+		<li><a href="{{ url_for('main.feed', user_tag=tag, page=(page - 1)) }}"><b>Previous</b></a></li>
+        {% endif %}
+		<li><a href="{{ url_for('main.feed', user_tag=tag, page=(page + 1)) }}"><b>Next</b></a></li>
+      </ul>
+    </nav>
+
+
     <!--here we will loop through video feed returned after user-submitted tag interpolation with OVP API feed has been processed by video feed processing logic elsewhere in app --!>
  
  {% for dict in video_package %}
@@ -76,10 +87,6 @@
        Get Asset Data
      </button>
 
-     {% if page > 1 %}
-	 <a href="{{ url_for('main.feed', user_tag=tag, page=(page - 1))}}">Previous</a>
-     {% endif %}
-	 <a href="{{ url_for('main.feed', user_tag=tag, page=(page + 1 )) }}">Next</a>
  
 	 <!-- Modal -->
        <div class="modal fade" id="myModal--{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
