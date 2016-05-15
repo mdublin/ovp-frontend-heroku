@@ -26,7 +26,6 @@ The other way to get the actual repository that's used for the app is to git clo
 
 
 For local dev, sometimes port gets stuck -- to find offending port:
-
-$ lsof -n -i4TCP:8000 | grep LISTEN
+    $ lsof -n -i4TCP:8000 | grep LISTEN
 
 

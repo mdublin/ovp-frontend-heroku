@@ -93,7 +93,7 @@ def feed(user_tag):
     '''
     creating feed URL with user_tag collected in /proctected view function so 
     could be http://127.0.0.1:8000/feed/boxing — the first feed url with videos
-    is technically page one, but we don't see the page value until page 2
+    is technically page one, but we do not see the page value until page 2
     (when user clicks next button) then we will see url like:
     http://127.0.0.1:8000/feed/boxing?page=2
     But these urls are created via url_for() functions attached to the prev and
