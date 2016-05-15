@@ -107,13 +107,14 @@ def feed(user_tag):
     parser_input = input_cleanup.input_prep(user_tag)
     #converting page from Unicode to int for passing to d.entries slice operation in load()
     page = int(page)
-    #sending return value of parser_input to the feed parser
+    
+    #sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
     video_package = video_feed_parser.load(parser_input, page, RESULTS_PER_PAGE)
 
     # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
     # return render_template('videofeed.html', video_id=video_id)
 
-
+    # sending video_package, current page number, and tag objects
     return render_template('videofeed.html', video_package=video_package, page=page, tag=user_tag)
 
 

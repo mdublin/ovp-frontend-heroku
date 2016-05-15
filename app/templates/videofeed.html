@@ -12,6 +12,7 @@
 
 	<!-- using Bootstrap pagination http://getbootstrap.com/components/#pagination --!>
 	<!-- pagination conditional, adding previous button if the current page object is == to more than 1, else just Next appears. --!>
+	<!-- url_for(endpoint, **values) generates a URL to the main.feed endpoint with the key/values given, which will be built into URL   http://flask.pocoo.org/docs/0.10/api/#flask.url_for --!>
 	<nav>
 		<ul class="pager">
 		{% if page > 1 %}
