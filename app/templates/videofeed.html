@@ -13,6 +13,7 @@
 	<!-- using Bootstrap pagination http://getbootstrap.com/components/#pagination --!>
 	<!-- pagination conditional, adding previous button if the current page object is == to more than 1, else just Next appears. --!>
 	<!-- url_for(endpoint, **values) generates a URL to the main.feed endpoint with the key/values given, which will be built into URL   http://flask.pocoo.org/docs/0.10/api/#flask.url_for --!>
+	<!-- url_for('main.feed', user_tag=tag) is basically the same as calling the feed() view function in routes.py. But because there is an extra variable argument of page=(page - 1) or page=(page +1) that is unknown to the feed() endpoint view function, which only takes tag as an argument, Flaskappends that extra variable ot the URL as a query argument. Hence, ?page=2  --!>
 	<nav>
 		<ul class="pager">
 		{% if page > 1 %}
