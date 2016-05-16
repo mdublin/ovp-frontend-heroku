@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}video upload{% endblock %}
+
+
+{% block page_content %}
+<body background="{{ url_for('static', filename = 'whtntv4.jpg') }}"> 
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+        href="{{url_for('static', filename='newstyle.css')}}">
+    {% endblock %}
+    <textblock>
+    <h1>Video Search</h1>
+    <p>This page can only be viewed by logged in users.</p>
+    <p>You are logged in as <b>{{ current_user.username }}</b>.</p>
+    <p>*Separate tags with a comma; no tag > 128 characters</p>
+	</textblock>
+	<h1>Upload new File</h1>
+	<form action="" method=post enctype=multipart/form-data>
+		<p><input type=file name=file>
+			<input type=submit value=Upload>
+		</form>
+
+{% endblock %}

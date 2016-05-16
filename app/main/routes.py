@@ -15,6 +15,13 @@ from ..parser import video_feed_parser, input_cleanup
 
 RESULTS_PER_PAGE = 5
 
+# video upload handling
+from werkzeug import secure_filename
+from flask import send_from_directory
+import os
+from flask import current_app as application
+
+
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -177,10 +184,31 @@ def protected():
     return render_template('protected.html', tagform=tagform)
 
 
-#video file uploader view
+# for video file uploading
+# these should be in config file!!! They are, but not available to routes.py
+# DATABASE_URI and DATABASE_URL work because they are exported as environment variables
+ALLOWED_EXTENSIONS = set(['mov', 'mp4', 'mpeg', 'mpg', 'flv', 'avi'])
+UPLOAD_FOLDER = "/app/ovpAPI/uploads"
+MAX_CONTENT_LENGTH = 900 * 1024 * 102
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
 @main.route('/upload', methods=['GET', 'POST'])
-@login_required
 def upload():
-    return("under construction...")
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+            #return redirect(url_for('main.uploaded_file', filename=filename))
+    return render_template('upload.html')
 
 
+#@main.route('/uploads/<filename>')
+#def uploaded_file(filename):
+#    return send_from_directory(application.config['UPLOAD_FOLDER'], filename)
+
+    
