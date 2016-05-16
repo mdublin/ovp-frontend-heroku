@@ -78,5 +78,8 @@ def create_app(config_name):
     # application bound to current context
 
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+        except OperationalError:
+            print("database already exists")
     return app
