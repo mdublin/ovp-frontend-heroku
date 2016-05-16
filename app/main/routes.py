@@ -177,5 +177,10 @@ def protected():
     return render_template('protected.html', tagform=tagform)
 
 
+#video file uploader view
+@main.route('/upload', methods=['GET', 'POST'])
+@login_required
+def upload():
+    return("under construction...")
 
 
