@@ -22,7 +22,45 @@
 	<h1>Upload new File</h1>
 	<form action="" method=post enctype=multipart/form-data>
 		<p><input type=file name=file>
-			<input type=submit value=Upload>
+			<input type=submit value=upload>
 		</form>
+
+
+
+<label class="control-label">Upload File From Folder</label>
+<input id="input-folder-1" type="file" class="file-loading" webkitdirectory>
+<script>
+$(document).on('ready', function() {
+    $("#input-folder-1").fileinput({
+        browseLabel: 'Select Folder...'
+    });
+});
+</script>
+
+
+	<link rel="stylesheet" href="{{url_for('static', filename='uploadbutton.css')}}">
+	{% block javascript %}
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="static/uploadbutton.js"></script>
+		
+		<div class="col-lg-6 col-sm-6 col-12">
+		<h4>Standard Button</h4>
+		<span class="file-input btn btn-primary btn-file">Browse&hellip; <input type="file" multiple>
+		</span>
+		</div>
+
+
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="static/bootstrap.file-input.js"></script>
+		
+		<input type="file" title="Search for a file to add" class="file-input btn btn-primary btn-file">
+	{% endblock %}
+
+
+
+
+
 
 {% endblock %}

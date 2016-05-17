@@ -24,7 +24,10 @@ print(application.config["MAX_CONTENT_LENGTH"])
 
 
 #application = app()
-application = WhiteNoise(application, root='/path/to/static/files')
+application = WhiteNoise(application, root='/app/static/')
+
+print(application)
+
 application.add_files('/path/to/more/static/files', prefix='more-files/')
 
 

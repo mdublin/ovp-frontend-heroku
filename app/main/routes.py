@@ -190,6 +190,8 @@ def protected():
 ALLOWED_EXTENSIONS = set(['mov', 'mp4', 'mpeg', 'mpg', 'flv', 'avi'])
 UPLOAD_FOLDER = "/app/ovpAPI/uploads"
 MAX_CONTENT_LENGTH = 900 * 1024 * 102
+UPLOAD_FOLDER_GET = "/app/ovpAPI/uploads" 
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -203,12 +205,16 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
-            #return redirect(url_for('main.uploaded_file', filename=filename))
+            return redirect(url_for('main.uploaded_file', filename=filename))
     return render_template('upload.html')
 
 
-#@main.route('/uploads/<filename>')
-#def uploaded_file(filename):
-#    return send_from_directory(application.config['UPLOAD_FOLDER'], filename)
+@main.route('/uploads/<filename>')
+def uploaded_file(filename):
+    # getting actual disk root directory where project is, so /Users/mdublin1/Downloads
+    root_dir = os.path.dirname(os.getcwd())
+    print(root_dir)
+    return send_from_directory(os.path.join(root_dir, 'ovp-frontend-heroku','app', 'ovpAPI', 'uploads'), filename)
+    #return send_from_directory('/Users/mdublin1/Downloads/ovp-frontend-heroku/app/ovpAPI/uploads/', filename)
 
     
