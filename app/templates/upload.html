@@ -14,53 +14,61 @@
         href="{{url_for('static', filename='newstyle.css')}}">
     {% endblock %}
     <textblock>
-    <h1>Video Search</h1>
-    <p>This page can only be viewed by logged in users.</p>
-    <p>You are logged in as <b>{{ current_user.username }}</b>.</p>
-    <p>*Separate tags with a comma; no tag > 128 characters</p>
 	</textblock>
 	<h1>Upload new File</h1>
-	<form action="" method=post enctype=multipart/form-data>
-		<p><input type=file name=file>
-			<input type=submit value=upload>
-		</form>
 
 
+<!-- querySelector() not finding this id, have to use stripped down version of button, which defeats the whole purpose of this --!>
+<label class="btn btn-primary" for="my-file-selector">
+	<input id="my-file-selector" input type="file" multiple="multiple" style="display:none;"/>Select Video File</label>
 
-<label class="control-label">Upload File From Folder</label>
-<input id="input-folder-1" type="file" class="file-loading" webkitdirectory>
+
 <script>
-$(document).on('ready', function() {
-    $("#input-folder-1").fileinput({
-        browseLabel: 'Select Folder...'
-    });
-});
+	(function () {
+    //for some reason, needed to decalre uploadfiles first, before assigning to querySelector()
+    var uploadfiles;
+    uploadfiles = document.querySelector('#my-file-selector');
+    uploadfiles.addEventListener('change', function () {
+		alert("TRIGGER!!!");
+		var files = this.files;
+        for(var i=0; i<files.length; i++){
+			uploadFile(this.files[i]);
+			alert(this.files[i]);
+        }
+
+    }, false);
+
+
+    /**
+     * Upload a file
+     * @param file
+     */
+	function uploadFile(file){
+        var url = "/upload";
+        var xhr = new XMLHttpRequest();
+        var fd = new FormData();
+		xhr.open("POST", url, true);
+		xhr.onload = function() {	
+	    //xhr.onreadystatechange = function() {
+            if (xhr.status == 200) {
+		
+            //if (xhr.readyState == 4 && xhr.status == 200) {
+                // Every thing ok, file uploaded
+                console.log(xhr.responseText); // handle response.
+				alert("readyState and xhr.status OK");
+				location.href="/";
+			}
+			else{
+				alert("readyState and xhr.status NOT OK");
+			}
+		};
+
+		fd.append('uploaded_file', file);
+		alert('uploaded_file', file);
+		xhr.send(fd);
+    }
+}());
 </script>
 
-
-	<link rel="stylesheet" href="{{url_for('static', filename='uploadbutton.css')}}">
-	{% block javascript %}
-		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-		<script src="static/uploadbutton.js"></script>
-		
-		<div class="col-lg-6 col-sm-6 col-12">
-		<h4>Standard Button</h4>
-		<span class="file-input btn btn-primary btn-file">Browse&hellip; <input type="file" multiple>
-		</span>
-		</div>
-
-
-		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-		<script src="static/bootstrap.file-input.js"></script>
-		
-		<input type="file" title="Search for a file to add" class="file-input btn btn-primary btn-file">
-	{% endblock %}
-
-
-
-
-
-
 {% endblock %}
+

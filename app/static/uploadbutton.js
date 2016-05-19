@@ -17,7 +17,14 @@ $(document).ready(function() {
       if (log) alert(log);
     }
 
-  });
+     $.post("/upload.html", {
+    javascript_data: input
 });
+
+  });
+
+});
+
+
 
 

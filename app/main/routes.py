@@ -22,6 +22,8 @@ import os
 from flask import current_app as application
 
 
+
+
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -73,6 +75,22 @@ def register():
 def index():
     return render_template('index.html')
 
+
+
+@main.route('/AJAXtest', methods=['GET', 'POST'])
+def AJAXtest():
+    '''test for AJAX response. 
+    open JS console in browser on any page of app, then try: 
+       > $.post("/AJAXtest", { username: "hello"  });
+       or
+       > $.get("/AJAXtest");    
+    '''
+    print "AJAXtest() called"
+    if request.method == 'POST':
+        print("POST method called")
+        print(request.form['username'])
+        return (request.form['username'])
+    return "GET method called"
 
 
 @main.route('/videosearch', methods=['GET', 'POST'])
@@ -197,11 +215,13 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-
 @main.route('/upload', methods=['GET', 'POST'])
 def upload():
+    '''
+    AJAX in upload.html is handling POST and redirect to main.upload_file
+    '''
     if request.method == 'POST':
-        file = request.files['file']
+        file = request.files['uploaded_file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
@@ -211,7 +231,6 @@ def upload():
 
 @main.route('/uploads/<filename>')
 def uploaded_file(filename):
-    # getting actual disk root directory where project is, so /Users/mdublin1/Downloads
     root_dir = os.path.dirname(os.getcwd())
     print(root_dir)
     return send_from_directory(os.path.join(root_dir, 'ovp-frontend-heroku','app', 'ovpAPI', 'uploads'), filename)
