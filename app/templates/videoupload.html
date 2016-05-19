@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}video upload{% endblock %}
+
+
+{% block page_content %}
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+        href="{{url_for('static', filename='uploadstyle.css')}}">
+    {% endblock %}
+
+	<div class='text-center'>
+		<newnav><h1>Submit Video Asset</h1></newnav>
+	</div>
+<!-- querySelector() not finding this id, have to use stripped down version of button, which defeats the whole purpose of this --!>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+
+
+
+
+<form id="foo" form>
+	<fieldset class="form-group">
+    <label for="exampleTextarea">Title</label>
+    <textarea class="form-control" id="exampleTextarea" rows="1"></textarea>
+  </fieldset>
+    <fieldset class="form-group">
+    <label for="exampleTextarea">Description</label>
+    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+</fieldset>
+ <fieldset class="form-group">
+    <label for="exampleTextarea">Tags</label>
+    <textarea class="form-control" id="exampleTextarea" rows="1"></textarea>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="exampleInputFile">File input</label>
+    <input type="file" class="form-control-file" id="exampleInputFile">
+	<small class="text-muted"></small>
+  </fieldset>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+
+
+
+<script>
+	(function () {
+    //for some reason, needed to decalre uploadfiles first, before assigning to querySelector()
+    var uploadfiles;
+    uploadfiles = document.querySelector('#exampleInputFile');
+    uploadfiles.addEventListener('change', function () {
+		alert("TRIGGER!!!");
+		var files = this.files;
+        for(var i=0; i<files.length; i++){
+			uploadFile(this.files[i]);
+			alert(this.files[i]);
+        }
+
+    }, false);
+
+
+    /**
+     * Upload a file
+     * @param file
+     */
+	function uploadFile(file){
+        var url = "/videoupload";
+        var xhr = new XMLHttpRequest();
+        var fd = new FormData();
+		xhr.open("POST", url, true);
+		xhr.onload = function() {	
+	    //xhr.onreadystatechange = function() {
+            if (xhr.status == 200) {
+		
+            //if (xhr.readyState == 4 && xhr.status == 200) {
+                // Every thing ok, file uploaded
+                console.log(xhr.responseText); // handle response.
+				alert("readyState and xhr.status OK");
+				//	location.href="/";
+
+				//$("#new-projects").load("/ajaxtest #buggy");
+
+			}
+			else{
+				alert("readyState and xhr.status NOT OK");
+			}
+		};
+
+		fd.append('uploaded_file', file);
+		alert('uploaded_file', file);
+		xhr.send(fd);
+    }
+}());
+</script>
+
+{% endblock %}
+

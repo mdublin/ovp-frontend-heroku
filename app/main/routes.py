@@ -236,4 +236,16 @@ def uploaded_file(filename):
     return send_from_directory(os.path.join(root_dir, 'ovp-frontend-heroku','app', 'ovpAPI', 'uploads'), filename)
     #return send_from_directory('/Users/mdublin1/Downloads/ovp-frontend-heroku/app/ovpAPI/uploads/', filename)
 
-    
+   
+#new video upload
+@main.route('/videoupload', methods=['GET','POST'])
+def videoupload():
+    return render_template('videoupload.html')
+
+
+
+
+@main.route('/ajaxtest', methods=['GET','POST'])
+def ajaxtest():
+    return render_template('ajaxtest.html')
+

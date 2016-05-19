@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}video upload{% endblock %}
+
+
+{% block page_content %}
+<body background="{{ url_for('static', filename = 'whtntv4.jpg') }}"> 
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+        href="{{url_for('static', filename='uploadstyle.css')}}">
+    {% endblock %}
+    <textblock>
+	</textblock>
+    <link rel="stylesheet" href="{{url_for('static', filename='newstyle.css')}}">
+
+
+<div id="feeds"><b>BRINGING IN FROM ajaxtest.html</b></div>
+
+
+<ol type="a" id="shit">
+  <li>Coffee</li>
+  <li>Tea</li>
+  <li>Milk</li>
+</ol>
+
+
+
+
+<div id="phife">
+	<form>
+  First name:<br>
+  <input type="text" name="firstname"><br>
+  Last name:<br>
+  <input type="text" name="lastname">
+</form>
+</div>
+
+
+
+<div id="foo"> 
+<form>
+  <fieldset class="form-group">
+    <label for="formGroupExampleInput">Example label</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="formGroupExampleInput2">Another label</label>
+    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+  </fieldset>
+</form>
+</div>
+
+{% endblock %}
+

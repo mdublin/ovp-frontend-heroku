@@ -11,16 +11,26 @@
     {% block styles %}
     {{super()}}
     <link rel="stylesheet"
-        href="{{url_for('static', filename='newstyle.css')}}">
+        href="{{url_for('static', filename='uploadstyle.css')}}">
     {% endblock %}
     <textblock>
 	</textblock>
-	<h1>Upload new File</h1>
+    <link rel="stylesheet" href="{{url_for('static', filename='newstyle.css')}}">
 
-
+	<div class='text-center'>
+		<newnav><h1>Upload new file</h1></newnav>
 <!-- querySelector() not finding this id, have to use stripped down version of button, which defeats the whole purpose of this --!>
 <label class="btn btn-primary" for="my-file-selector">
 	<input id="my-file-selector" input type="file" multiple="multiple" style="display:none;"/>Select Video File</label>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+
+
+
+<div id="foo"></div>
+
 
 
 <script>
@@ -56,7 +66,10 @@
                 // Every thing ok, file uploaded
                 console.log(xhr.responseText); // handle response.
 				alert("readyState and xhr.status OK");
-				location.href="/";
+	
+			    //AJAX JQuery call that is loading a form from another html file
+				$("#foo").load("/ajaxtest #foo");
+
 			}
 			else{
 				alert("readyState and xhr.status NOT OK");
@@ -69,6 +82,24 @@
     }
 }());
 </script>
+
+
+<!-- example of AJAX call to import form element from one html file into another, this allows you to load forms dynamically without redirecting, the magic of AJAX:
+
+Open js console on page with empty form element, for example http://127.0.0.1:8000/upload with this empty element declared in it:
+
+<div id="foo"></div>
+
+in console, you can test pulling a form element in another html file (in the same directory as your target html file) using the element id, say http://127.0.0.1:8000/ajaxtest, this way: 
+
+> $("#foo").load("/ajaxtest #foo")
+
+So you can setup this simple JQuery action to load a form after a button submit, for example. The magic of AJAX. 
+
+http://api.jquery.com/load/
+
+--!>
+
 
 {% endblock %}
 
