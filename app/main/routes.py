@@ -22,8 +22,6 @@ import os
 from flask import current_app as application
 
 
-
-
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -236,14 +234,24 @@ def uploaded_file(filename):
     return send_from_directory(os.path.join(root_dir, 'ovp-frontend-heroku','app', 'ovpAPI', 'uploads'), filename)
     #return send_from_directory('/Users/mdublin1/Downloads/ovp-frontend-heroku/app/ovpAPI/uploads/', filename)
 
-   
-#new video upload
+
+
+# new video upload w/AJAX
 @main.route('/videoupload', methods=['GET','POST'])
 def videoupload():
+    if request.method == 'POST':
+
+        print("POST CALLED")
+        formfile_submit = request.get_json('m_data')
+        print(formfile_submit)
+        test = request.json['m_data']
+        print(test)
     return render_template('videoupload.html')
 
 
 
+
+################################## ENDPOINT TESTS ##################################
 
 @main.route('/ajaxtest', methods=['GET','POST'])
 def ajaxtest():

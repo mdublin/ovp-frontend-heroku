@@ -77,9 +77,12 @@ def create_app(config_name):
     # RuntimeError: application not registered on db instance and no
     # application bound to current context
 
+    #with app.app_context():
+    #    try:
+    #        db.create_all()
+    #    except OperationalError:
+    #        print("database already exists")
     with app.app_context():
-        try:
-            db.create_all()
-        except OperationalError:
-            print("database already exists")
+        db.create_all()
+
     return app
