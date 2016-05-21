@@ -43,12 +43,13 @@ def login():
 @login_required
 def logout():
     logout_user()
-    # because routes are now in the main blueprint object, we do our redirects with main.index, which is getting the index.html file from main blueprint.
-    # blueprints allow namespacing to happen, so we are namespacing the endpoint names
-    # what if two or more blueprints have an index route? Flask handles that
-    # by namespacing the endpoint names, which is why we need to say
-    # main.index to get to the specific views in a particular blueprint (which
-    # is main, as that is the only blueprint right now).
+    # because routes are now in the main blueprint object, we do our redirects
+    # with main.index, which is getting the index.html file from main 
+    # blueprint. Blueprints allow namespacing to happen, so we are namespacing
+    # the endpoint names what if two or more blueprints have an index route?
+    # Flask handles that by namespacing the endpoint names, which is why we
+    # need to say main.index to get to the specific views in a particular
+    # blueprint (which is main, as that is the only blueprint right now).
 
     return redirect(url_for('main.index'))
 
@@ -237,15 +238,32 @@ def uploaded_file(filename):
 
 
 # new video upload w/AJAX
-@main.route('/videoupload', methods=['GET','POST'])
+@main.route('/videoupload', methods=['GET', 'POST'])
 def videoupload():
-    if request.method == 'POST':
+    '''
+    receiving ImmutableMultiDict from AJAX POST request in videoupload.html
+    /http://werkzeug.pocoo.org/docs/0.11/datastructures/#werkzeug.datastructures.MultiDict
 
-        print("POST CALLED")
-        formfile_submit = request.get_json('m_data')
-        print(formfile_submit)
-        test = request.json['m_data']
-        print(test)
+    '''
+    if request.method == 'POST':
+        print("POST CALLED!")
+        try:
+            print request.form
+            #file = request.files[]
+
+            data = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            print(data)
+            filename = request.files['file_attach']
+            print(filename)
+            #searchword = request.args.get('videoTitle', '')
+            #print(searchword)
+            #videoTitle = request.form['video_title']
+            #videoDescription = request.form['videoDescription']
+            #videoTags = request.form['videoTags']
+            #print(videoTitle)
+            
+        except Exception, e:
+            print e
     return render_template('videoupload.html')
 
 

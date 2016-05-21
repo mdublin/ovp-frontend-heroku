@@ -18,7 +18,7 @@
 	</div>
 <!-- querySelector() not finding this id, have to use stripped down version of button, which defeats the whole purpose of this --!>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 
 
 
@@ -49,10 +49,7 @@
 
 
 
-
-
 <script>
-
 $("#submit_btn").click(function() {  
         var proceed = true;
         //simple validation at client's end
@@ -73,15 +70,17 @@ $("#submit_btn").click(function() {
        
         if(proceed) //everything looks good! proceed...
         {
-           //data to be sent to server         
+			//data to be sent to server
+		//easy way to confirm user input entered is what is appened here is to use Firebug and open Net window
             var m_data = new FormData();    
-            m_data.append( 'video_title', $('input[name=videoTitle]').val());
-            m_data.append( 'video_description', $('input[name=videoDescription]').val());
-            m_data.append( 'video_tags', $('input[name=videoTags]').val());
-            m_data.append( 'file_attach', $('input[name=file_attach]')[0].files[0]);
-             
-            //instead of $.post() we are using $.ajax()
-            //that's because $.ajax() has more options and flexibly.
+			m_data.append( 'video_title', $('[name=videoTitle]').val());
+            m_data.append( 'video_description', $('[name=videoDescription]').val());
+            m_data.append( 'video_tags', $('[name=videoTags]').val());
+			m_data.append( 'file_attach', $('[name=file_attach]')[0].files[0]);
+			//instead of $.post() we are using $.ajax()
+			//that's because $.ajax() has more options and flexibly.
+			//m_data FormData() object is sent to Flask endpoint as ImmutableMultiDict
+		 	//http://werkzeug.pocoo.org/docs/0.11/datastructures/#werkzeug.datastructures.MultiDict
             $.ajax({
               url: '/videoupload',
 			  data: m_data,
@@ -89,7 +88,7 @@ $("#submit_btn").click(function() {
               contentType: false,
 		  	  type: 'POST',
 				  //dataType:'json',
-			  datatype:'html',
+			  datatype:'json',
               success: function(response){
                  //load json data from server and output message     
                 if(response.type == 'error'){ //load json data from server and output message     
@@ -99,7 +98,7 @@ $("#submit_btn").click(function() {
                 }
                 $("#videoform #form_results").hide().html(output).slideDown();
               }
-            });         
+            });        
         }
     });
     
