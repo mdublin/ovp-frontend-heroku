@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash, jsonify
 # TK: add context variables (session, g) and user login registration,
 # login callback, load user data upon login, etc
 
@@ -20,7 +20,6 @@ from werkzeug import secure_filename
 from flask import send_from_directory
 import os
 from flask import current_app as application
-
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -53,9 +52,6 @@ def logout():
 
     return redirect(url_for('main.index'))
 
-
-
-from ..models import User
 # NEED TO CONNECT TO DATABASE, UPDATE DATABASE!!!
 # registration
 @main.route('/register', methods=['GET', 'POST'])
@@ -249,18 +245,16 @@ def videoupload():
         print("POST CALLED!")
         try:
             print request.form
-            #file = request.files[]
-
             data = dict((key, request.form.getlist(key)) for key in request.form.keys())
             print(data)
-            filename = request.files['file_attach']
-            print(filename)
-            #searchword = request.args.get('videoTitle', '')
-            #print(searchword)
-            #videoTitle = request.form['video_title']
-            #videoDescription = request.form['videoDescription']
-            #videoTags = request.form['videoTags']
-            #print(videoTitle)
+            file = request.files['file_attach']
+            print(file.filename)
+            if file and allowed_file(file.filename):
+                print("INSIDE IF")
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+                response = {"username": "admin"}
+                return jsonify(response)
             
         except Exception, e:
             print e
@@ -271,7 +265,17 @@ def videoupload():
 
 ################################## ENDPOINT TESTS ##################################
 
+# ajax example
 @main.route('/ajaxtest', methods=['GET','POST'])
 def ajaxtest():
     return render_template('ajaxtest.html')
 
+# jsonify example
+@main.route('/_get_current_user')
+def get_current_user():
+    test = {
+    "username": "admin",
+    "email": "admin@localhost",
+    "id": 42
+}
+    return jsonify(test)

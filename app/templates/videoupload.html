@@ -89,7 +89,8 @@ $("#submit_btn").click(function() {
 		  	  type: 'POST',
 				  //dataType:'json',
 			  datatype:'json',
-              success: function(response){
+			  success: function(response){
+				  alert(response);
                  //load json data from server and output message     
                 if(response.type == 'error'){ //load json data from server and output message     
                     output = '<div class="error">'+response.text+'</div>';
