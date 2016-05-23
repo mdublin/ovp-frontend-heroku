@@ -21,6 +21,9 @@ from flask import send_from_directory
 import os
 from flask import current_app as application
 
+
+# LOGIN
+
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -97,10 +100,10 @@ def videosearch():
         user_tag = tagform.tag.data
         parser_input = input_cleanup.input_prep(user_tag)
         video_package = video_feed_parser.load(parser_input)
-        #send video_package to search result db
-        #return render_template('videofeed.html', video_package=video_package)
+        # send video_package to search result db
+        # return render_template('videofeed.html', video_package=video_package)
         
-        #delete entries in db after pages are created? delete entries after user session is done?
+        # delete entries in db after pages are created? delete entries after user session is done?
 
 
     return render_template('videosearch.html', tagform=tagform)
@@ -224,16 +227,18 @@ def upload():
     return render_template('upload.html')
 
 
+
 @main.route('/uploads/<filename>')
 def uploaded_file(filename):
     root_dir = os.path.dirname(os.getcwd())
     print(root_dir)
     return send_from_directory(os.path.join(root_dir, 'ovp-frontend-heroku','app', 'ovpAPI', 'uploads'), filename)
-    #return send_from_directory('/Users/mdublin1/Downloads/ovp-frontend-heroku/app/ovpAPI/uploads/', filename)
+    # return send_from_directory('/Users/mdublin1/Downloads/ovp-frontend-heroku/app/ovpAPI/uploads/', filename)
 
 
 
 # new video upload w/AJAX
+
 @main.route('/videoupload', methods=['GET', 'POST'])
 def videoupload():
     '''
@@ -247,19 +252,23 @@ def videoupload():
             print request.form
             data = dict((key, request.form.getlist(key)) for key in request.form.keys())
             print(data)
-            file = request.files['file_attach']
-            print(file.filename)
-            if file and allowed_file(file.filename):
-                print("INSIDE IF")
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
-                response = {"username": "admin"}
-                return jsonify(response)
+            videofile = request.files['file_attach']
+            print(videofile.filename)
+
+            if videofile and allowed_file(videofile.filename):
+                filename = secure_filename(videofile.filename)
+                videofile.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+                return redirect(url_for('main.uploadsuccess'))
             
         except Exception, e:
             print e
     return render_template('videoupload.html')
 
+
+
+@main.route('/uploadsuccess', methods=['GET', 'POST'])
+def uploadsuccess():
+    return render_template('uploadsuccess.html')
 
 
 
@@ -271,7 +280,7 @@ def ajaxtest():
     return render_template('ajaxtest.html')
 
 # jsonify example
-@main.route('/_get_current_user')
+@main.route('/get_current_user')
 def get_current_user():
     test = {
     "username": "admin",
@@ -279,3 +288,8 @@ def get_current_user():
     "id": 42
 }
     return jsonify(test)
+
+
+
+
+

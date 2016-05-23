@@ -90,24 +90,29 @@ $("#submit_btn").click(function() {
 				  //dataType:'json',
 			  datatype:'json',
 			  success: function(response){
-				  alert(response);
+				 //location.href = "http://127.0.0.1:8000/uploadsuccess";
+				 //location.url='/videoupload';
                  //load json data from server and output message     
                 if(response.type == 'error'){ //load json data from server and output message     
-                    output = '<div class="error">'+response.text+'</div>';
-                }else{
-                    output = '<div class="success">'+response.text+'</div>';
+					output = '<div class="error">'+response.text+'</div>';
+					$("#videoform #form_results").hide().html(output).slideDown();
+
+				}else{
+					//output = '<div class="success">'+response.text+'</div>';
+					window.location.replace("http://127.0.0.1:8000/uploadsuccess");
+
                 }
-                $("#videoform #form_results").hide().html(output).slideDown();
+				//$("#videoform #form_results").hide().html(output).slideDown();
               }
             });        
         }
     });
     
     //reset previously set border colors and hide all message on .keyup()
-    $("#contact_form  input[required=true], #contact_form textarea[required=true]").keyup(function() { 
-        $(this).css('border-color',''); 
-        $("#result").slideUp();
-    });
+    //$("#contact_form  input[required=true], #contact_form textarea[required=true]").keyup(function() { 
+    //    $(this).css('border-color',''); 
+    //    $("#result").slideUp();
+    //});
 
 
 </script>
