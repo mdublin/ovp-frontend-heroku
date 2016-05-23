@@ -239,6 +239,8 @@ def uploaded_file(filename):
 
 # new video upload w/AJAX
 
+from ..ovpAPI.DI import uploader
+
 @main.route('/videoupload', methods=['GET', 'POST'])
 def videoupload():
     '''
@@ -254,6 +256,9 @@ def videoupload():
             print(data)
             videofile = request.files['file_attach']
             print(videofile.filename)
+
+            # send video metadata to uploader.py
+            uploader.meta_parser(data)
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)

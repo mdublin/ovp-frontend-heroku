@@ -1,7 +1,5 @@
 {
-	"account_id" : " ",
-	"client_secret": " ",
-	"client_id" : " "
-
-}
-
+	"account_id" : "" ,
+		"client_secret": "" ,
+ 	 "client_id" : ""
+ }

@@ -11,10 +11,10 @@ import urllib
 import base64
 import json
 import requests
-import models
+#import models
 
 # create video table object:
-Video = models.Video()
+#Video = models.Video()
 
 
 # Read the oauth secrets and account ID from our oauth configuration file "brightcove_oauth.txt" located in
