@@ -264,8 +264,8 @@ def videoupload():
                 filename = secure_filename(videofile.filename)
                 videofile.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
                 #return redirect(url_for('main.uploadsuccess'))
-            print("before jsonify")
-            return jsonify(message="Hello!")
+            #print("before jsonify")
+            #return jsonify(message="Hello!")
             
         except Exception, e:
             print e
@@ -297,6 +297,31 @@ def get_current_user():
     return jsonify(test)
 
 
+@main.route('/FormDataTest', methods=['GET', 'POST'])
+def FormDataTest():
+    if request.method == 'POST':
+        print("POST CALLED!")
+        try:
+            print request.form
+            data = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            print(data)
+            videofile = request.files['file_attach']
+            print(videofile.filename)
+
+            # send video metadata to uploader.py
+            #uploader.meta_parser(data)
+
+            if videofile and allowed_file(videofile.filename):
+                filename = secure_filename(videofile.filename)
+                videofile.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+                #return redirect(url_for('main.uploadsuccess'))
+            #print("before jsonify")
+            #return jsonify(message="Hello!")
+            
+        except Exception, e:
+            print e
+    
+    return render_template('FormDataTest.html')
 
 
 

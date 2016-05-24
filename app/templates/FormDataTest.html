@@ -23,8 +23,21 @@
 
 
 
+<!-- MDN example form 
+<form enctype="multipart/form-data" method="post" name="fileinfo">
+  <label>Your email address:</label>
+  <input type="email" autocomplete="on" autofocus name="userid" placeholder="email" required size="32" maxlength="64" /><br />
+  <label>Custom file label:</label>
+  <input type="text" name="filelabel" size="12" maxlength="32" /><br />
+  <label>File to stash:</label>
+  <input type="file" name="file" required />
+  <input type="submit" value="Stash the file!" />
+</form>
+<div></div> --!>
 
-<form id="videoform" form>
+
+
+<form id="videoform" name="bootform" form>
 	<div id="form_results"></div>
 	<fieldset class="form-group">
     <label for="exampleTextarea">Title</label>
@@ -49,9 +62,34 @@
 
 
 
+
+<!-- keep it simple, stupid — AJAX from MDN docs, where all things work better than Stackoverflow/googling results: 
+https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects  --!>
+
 <script>
+var form = document.forms.namedItem("bootform");
+form.addEventListener('submit', function(ev) {
 
+  var oOutput = document.querySelector("div"),
+      oData = new FormData(form);
 
+  oData.append("CustomField", "This is some extra data");
+
+  var oReq = new XMLHttpRequest();
+  oReq.open("POST", "/FormDataTest", true);
+  oReq.onload = function(oEvent) {
+	  if (oReq.status == 200) {
+		  alert("200 status");
+		  window.location.replace("http://127.0.0.1:8000/uploadsuccess");
+      //oOutput.innerHTML = "Uploaded!";
+    } else {
+      oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+    }
+  };
+
+  oReq.send(oData);
+  ev.preventDefault();
+}, false);
 
 </script>
 
