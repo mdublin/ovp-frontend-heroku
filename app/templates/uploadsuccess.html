@@ -6,12 +6,14 @@
 
 
 {% block page_content %}
+<link rel="stylesheet" href="{{url_for('static', filename='newstyle.css')}}">
+
 
 <div class="span7 text-center">
-   <a class="btn btn-primary" href="{{ url_for('main.videoupload') }}" role="button">Upload Another Video</a>
-<!-- <button class="btn btn-primary" type="submit">Button</button>
-<input class="btn btn-primary" type="button" value="Input">
-<input class="btn btn-primary" type="submit" value="Submit"> --!>
+<div class="jumbotron">
+	<h1><newnav>Success!</newnav></h1>
+		<p><a class="btn btn-primary btn-lg" href="{{ url_for('main.videoupload')  }}" role="button">Upload Another Video</a></p>
+	  </div>
 </div>
 	{% endblock %}
 

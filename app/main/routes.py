@@ -242,6 +242,7 @@ def uploaded_file(filename):
 from ..ovpAPI.DI import uploader
 
 @main.route('/videoupload', methods=['GET', 'POST'])
+@login_required
 def videoupload():
     '''
     receiving ImmutableMultiDict from AJAX POST request in videoupload.html
@@ -297,6 +298,7 @@ def get_current_user():
     return jsonify(test)
 
 
+# for testing MDN example of AJAX upload using FormData object 
 @main.route('/FormDataTest', methods=['GET', 'POST'])
 def FormDataTest():
     if request.method == 'POST':

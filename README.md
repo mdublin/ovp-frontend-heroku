@@ -29,3 +29,32 @@ For local dev, sometimes port gets stuck -- to find offending port:
     $ lsof -n -i4TCP:8000 | grep LISTEN
 
 
+
+
+AWS S3:
+ 
+Basically we're using a public-access bucket on AWS S3 to upload video assets and be able generate/grab publically available file URLs so that they can be passed to Brightcove's Dynamic Ingest API (although this is useful for any other OVP with a similar ingest option). 
+
+To configure your S3 bucket, here's an easy way that works as of this writing: 
+
+1. Sign into Amazon Web Services and go to S3 Management Console
+
+2. Click the Properties button for the desired bucket
+
+3. Go to Permissions tab and hit Add Bucket Policy link (or Edit Bucket Policy if you've already added one previously). 
+
+4. Copy and paste the following into the Bucket Policy Editor popup. Replace "YOUR-BUCKET-NAME" with your own bucket's name: 
+
+{"Version": "2008-10-17",
+"Statement": [{"Sid": "AllowPublicRead",
+"Effect": "Allow",
+"Principal": {
+"AWS": "*"
+},
+"Action": "s3:GetObject",
+"Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
+}]}
+
+
+
+
