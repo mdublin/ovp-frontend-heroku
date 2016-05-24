@@ -55,6 +55,6 @@ To configure your S3 bucket, here's an easy way that works as of this writing:
 "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
 }]}
 
-
+It doesn't seem like this should work, and you should use the Policy Generator ( http://awspolicygen.s3.amazonaws.com/policygen.html ), but the above really does work. 
 
 
