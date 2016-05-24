@@ -6,7 +6,7 @@ def meta_parser(data):
     
     title = data['video_title'][0]
     description = data['video_description'][0]
-    tags = data['video_tags'][0]
+    tags = data['video_tags'][0].splits(",")
     print("meta_parser() printing: {},{},{}".format(title, description, tags))
     return (title, description, tags)
 

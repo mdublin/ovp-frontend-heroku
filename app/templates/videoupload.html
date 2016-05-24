@@ -34,13 +34,14 @@
     <label for="exampleTextarea">Description</label>
     <textarea class="form-control" name="videoDescription" rows="3"></textarea>
 </fieldset>
- <fieldset class="form-group">
-    <label for="exampleTextarea">Tags</label>
+<fieldset class="form-group">
+	<newnav><p>*Separate tags with a comma; no tag > 128 characters</p></newnav>
+	<label for="exampleTextarea">Tags</label>
     <textarea class="form-control" name="videoTags" rows="1"></textarea>
   </fieldset>
   <fieldset class="form-group">
     <label for="exampleInputFile">File input</label>
-    <input type="file" class="form-control-file" name="file_attach">
+    <input type="file" class="form-control-file" id="TEST1" name="file_attach">
 	<small class="text-muted"></small>
   </fieldset>
   <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
@@ -50,7 +51,8 @@
 
 
 <script>
-$("#submit_btn").click(function() {  
+	$("#submit_btn").click(function(event) {
+		event.preventDefault();
         var proceed = true;
         //simple validation at client's end
         //loop through each field and we simply change border color to red for invalid fields       
@@ -75,8 +77,15 @@ $("#submit_btn").click(function() {
             var m_data = new FormData();    
 			m_data.append( 'video_title', $('[name=videoTitle]').val());
             m_data.append( 'video_description', $('[name=videoDescription]').val());
-            m_data.append( 'video_tags', $('[name=videoTags]').val());
-			m_data.append( 'file_attach', $('[name=file_attach]')[0].files[0]);
+			m_data.append( 'video_tags', $('[name=videoTags]').val());
+			//var getfile;
+			//getfile = document.getElementById("TEST1");
+			m_data.append( 'file_attach', $("#TEST1")[0].files[0]);
+			
+			//alert(document.getElementById("TEST1"));
+			//alert("test!!!", $('[name=file_attach]')[0]);
+			//m_data.append( 'file_attach', $('[name=file_attach]')[0].files[0]);
+			
 			//instead of $.post() we are using $.ajax()
 			//that's because $.ajax() has more options and flexibly.
 			//m_data FormData() object is sent to Flask endpoint as ImmutableMultiDict
@@ -85,8 +94,8 @@ $("#submit_btn").click(function() {
               url: '/videoupload',
 			  data: m_data,
               processData: false,
-              contentType: false,
-		  	  type: 'POST',
+			  contentType: false,
+			  type: 'POST',
 				  //dataType:'json',
 			  datatype:'json',
 			  success: function(response){
@@ -98,6 +107,7 @@ $("#submit_btn").click(function() {
 					$("#videoform #form_results").hide().html(output).slideDown();
 
 				}else{
+					console.log(response);
 					//output = '<div class="success">'+response.text+'</div>';
 					window.location.replace("http://127.0.0.1:8000/uploadsuccess");
 
@@ -106,7 +116,9 @@ $("#submit_btn").click(function() {
               }
             });        
         }
-    });
+	
+	return false;
+	});
     
     //reset previously set border colors and hide all message on .keyup()
     //$("#contact_form  input[required=true], #contact_form textarea[required=true]").keyup(function() { 

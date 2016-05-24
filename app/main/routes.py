@@ -258,12 +258,14 @@ def videoupload():
             print(videofile.filename)
 
             # send video metadata to uploader.py
-            uploader.meta_parser(data)
+            #uploader.meta_parser(data)
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)
                 videofile.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
-                return redirect(url_for('main.uploadsuccess'))
+                #return redirect(url_for('main.uploadsuccess'))
+            print("before jsonify")
+            return jsonify(message="Hello!")
             
         except Exception, e:
             print e

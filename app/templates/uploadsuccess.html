@@ -6,21 +6,13 @@
 
 
 {% block page_content %}
-    
-    {% block styles %}
-    {{super()}}
-    <link rel="stylesheet"
-        href="{{url_for('static', filename='uploadstyle.css')}}">
-    {% endblock %}
 
-	<div class='text-center'>
-		<newnav><h1>Success!!!</h1></newnav>
-	</div>
-<!-- querySelector() not finding this id, have to use stripped down version of button, which defeats the whole purpose of this --!>
+<div class="span7 text-center">
+   <a class="btn btn-primary" href="{{ url_for('main.videoupload') }}" role="button">Upload Another Video</a>
+<!-- <button class="btn btn-primary" type="submit">Button</button>
+<input class="btn btn-primary" type="button" value="Input">
+<input class="btn btn-primary" type="submit" value="Submit"> --!>
+</div>
+	{% endblock %}
 
-
-
-
-
-{% endblock %}
 
