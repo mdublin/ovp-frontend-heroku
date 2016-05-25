@@ -261,17 +261,21 @@ def videoupload():
             print(type(data))
             videofile = request.files['file_attach']
             # send video metadata to uploader.py 
-            uploader.meta_parser(data)
-            
+            video_meta_data = uploader.meta_parser(data)
+            print(video_meta_data)
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)
+                # saving video file in local file system
                 videofile.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+                # calling AWS S3 script to upload file to S3 bucket, which returns public URL of file
                 video_asset_url = AWS_S3_test.AWSConnector(filename)
                 print(video_asset_url)
 
-                #return redirect(url_for('main.uploadsuccess'))
-            #print("before jsonify")
+                # send video_asset_url and metadata to BC DI script
+                push_to_ovp = uploader.BCDI(video_asset_url, video_meta_data)
+
+
             #return jsonify(message="Hello!")
             
         except Exception, e:
