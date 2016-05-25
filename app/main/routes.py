@@ -240,6 +240,7 @@ def uploaded_file(filename):
 # new video upload w/AJAX
 
 from ..ovpAPI.DI import uploader
+from ..ovpAPI import AWS_S3_test
 
 @main.route('/videoupload', methods=['GET', 'POST'])
 @login_required
@@ -252,18 +253,23 @@ def videoupload():
     if request.method == 'POST':
         print("POST CALLED!")
         try:
+            print("THIS IS request.form")
             print request.form
             data = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            print("THIS IS DATA:")
             print(data)
+            print(type(data))
             videofile = request.files['file_attach']
-            print(videofile.filename)
-
-            # send video metadata to uploader.py
-            #uploader.meta_parser(data)
+            # send video metadata to uploader.py 
+            uploader.meta_parser(data)
+            
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)
                 videofile.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
+                video_asset_url = AWS_S3_test.AWSConnector(filename)
+                print(video_asset_url)
+
                 #return redirect(url_for('main.uploadsuccess'))
             #print("before jsonify")
             #return jsonify(message="Hello!")

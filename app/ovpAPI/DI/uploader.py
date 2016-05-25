@@ -1,13 +1,27 @@
 import BC
+import collections 
+
+def convert(data):
+    if isinstance(data, basestring):
+        return str(data)
+    elif isinstance(data, collections.Mapping):
+        return dict(map(convert, data.iteritems()))
+    elif isinstance(data, collections.Iterable):
+        return type(data)(map(convert, data))
+    else:
+        return data
+
 
 # handling ImmutableMultiDict from videoupload endpoint
 
 def meta_parser(data):
-    
-    title = data['video_title'][0]
-    description = data['video_description'][0]
-    tags = data['video_tags'][0].splits(",")
+    data = convert(data)
+    title = data['videoTitle'][0]
+    description = data['videoDescription'][0]
+    #tags = data['videoTags'][0].splits(",")
+    tags = data['videoTags'][0]
     print("meta_parser() printing: {},{},{}".format(title, description, tags))
+    print(title, description, tags)
     return (title, description, tags)
 
 

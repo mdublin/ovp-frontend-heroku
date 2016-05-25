@@ -73,13 +73,13 @@ form.addEventListener('submit', function(ev) {
   var oOutput = document.querySelector("div"),
       oData = new FormData(form);
 
-  oData.append("CustomField", "This is some extra data");
+  //oData.append("CustomField", "This is some extra data");
 
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/FormDataTest", true);
+  oReq.open("POST", "/videoupload", true);
   oReq.onload = function(oEvent) {
 	  if (oReq.status == 200) {
-		  alert("200 status");
+		  //alert("200 status");
 		  window.location.replace("http://127.0.0.1:8000/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";
     } else {
