@@ -3,7 +3,6 @@
 
 print "Content-type: application/json\n\n"
 import feedparser
-import json
 
 from ..models import SearchResult
 
@@ -49,6 +48,9 @@ def load(parser_input, page, results_per_page):
     print(type(page))
 
     # -- For each item in the feed
+    # The value of ====> (page - 1) * results_per_page  == Start point in feed
+    # The value of ====>  page * results_per_page + results_per_page == Stop point in feed
+    #
     for index, post in enumerate(
             d.entries[
             (page - 1) * results_per_page:page * results_per_page + results_per_page]):
