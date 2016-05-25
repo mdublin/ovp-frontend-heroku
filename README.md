@@ -52,7 +52,7 @@ To configure your S3 bucket, here's an easy way that works as of this writing:
 "AWS": "*"
 },
 "Action": "s3:GetObject",
-"Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
+"Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/**"
 }]}
 
 
