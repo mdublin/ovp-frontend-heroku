@@ -45,7 +45,7 @@ To configure your S3 bucket, here's an easy way that works as of this writing:
 
 4. Copy and paste the following into the Bucket Policy Editor popup. Replace "YOUR-BUCKET-NAME" with your own bucket's name: 
 
-    {"Version": "2008-10-17", "Statement": [{"Sid": "AllowPublicRead", "Effect": "Allow", "Principal": { "AWS": "*" }, "Action": "s3:GetObject", "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*" }]}
+	{"Version": "2008-10-17", "Statement": [{"Sid": "AllowPublicRead", "Effect": "Allow", "Principal": { "AWS": "*" }, "Action": "s3:GetObject", "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*" }]}
 
 It doesn't seem like this should work, and you should use the Policy Generator ( http://awspolicygen.s3.amazonaws.com/policygen.html ), but the above really does work. 
 
