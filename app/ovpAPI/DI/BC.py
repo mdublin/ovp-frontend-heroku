@@ -28,6 +28,7 @@ def loadSecret():
         creds = json.load(credsFile)
         return creds
     except IOError as e:
+        print("INSIDE LOAD SECRET!!!")
         print(e)
 
 
