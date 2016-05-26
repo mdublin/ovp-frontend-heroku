@@ -17,6 +17,10 @@ import os
 # create video table object:
 #Video = models.Video()
 
+
+# Read the oauth secrets and account ID from our oauth configuration file "brightcove_oauth.txt" located in
+# same directory as our Python scripts
+
 def loadSecret():
     print("called loadSecret")
     try:
@@ -84,7 +88,7 @@ def createVid(account, token, name, tags=[], description=""):
 def ingestVid(account, token, vidId, videoUrl,
               profile="balanced-high-definition"):
     print("ingestVid called")
-    url = 'https://cms.api.brightcove.com/v1/accounts/{BRIGHTCOVE ACCOUNT ID}/videos/{}/ingest-requests'.format(
+    url = 'https://cms.api.brightcove.com/v1/accounts/30409504001/videos/{}/ingest-requests'.format(
         vidId)
     headers = {"Authorization": "Bearer " +
                token, "Content-Type": "application/json"}
@@ -117,7 +121,7 @@ def videoNameExists(vidName):
     print("videoNameExists called")
     vidName = vidName.encode("utf-8")
     bugFixVidName = vidName.replace(":", "")
-    search_url = 'https://api.brightcove.com/services/library?command=search_videos&video_fields=name&page_number=0&get_item_count=true&token={BRIGHTCOVE API READ TOKEN}&any=%22{}%22'.format(
+    search_url = 'https://api.brightcove.com/services/library?command=search_videos&video_fields=name&page_number=0&get_item_count=true&token=kwSt2FKpMowoIdoOAvKj-MrTAcEDzW8SUwWu71Mhz7XEaNjlPJo2Hg..&any=%22{}%22'.format(
         bugFixVidName)
 
     r = requests.get(search_url)
