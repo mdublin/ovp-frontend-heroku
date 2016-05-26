@@ -31,16 +31,28 @@ def meta_parser(data):
 
 
 def BCDI(video_asset_url, video_meta_data):
-    ''' 
+    '''
     sends video metadata from
-    form and video url from AWS S3 
+    videoupload form and video url from AWS S3 
     to Brightcove Dynamic Ingest
     '''
+    data = convert(video_meta_data)
+    name = data['videoTitle'][0]
+    desc = data['videoDescription'][0]
+    #tags = data['videoTags'][0].splits(",")
+    tags = data['videoTags'][0]
+    tags = tags.split(",")
+    tags = filter(None, tags)
+    url = video_asset_url
 
     #dedupe check for uploading
     if not BC.videoNameExists(name):
         print("did not see video, submitting to OVP CMS...")
+        print(name, url, tags, desc)
+        print(type(name), type(url), type(tags), type(desc))
         create_video = BC.createAndIngest(name, url, tags, desc)
+        print("after create_video")
+
     else:
         print "video was found in OVP CMS.."
 
@@ -48,14 +60,7 @@ def BCDI(video_asset_url, video_meta_data):
 
 
 
-# file handling
-
-name = ""
-desc = ""
-url = ""
-tags = ""
-
-tags = tags.split(",")
+#tags = tags.split(",")
 #clean up
-tags = filter(None, tags)
+#tags = filter(None, tags)
 

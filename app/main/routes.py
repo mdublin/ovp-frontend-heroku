@@ -91,22 +91,22 @@ def AJAXtest():
     return "GET method called"
 
 
-@main.route('/videosearch', methods=['GET', 'POST'])
-@login_required
-def videosearch():
-    tagform = TagSearchForm()
+#@main.route('/videosearch', methods=['GET', 'POST'])
+#@login_required
+#def videosearch():
+#    tagform = TagSearchForm()
 
-    if tagform.validate_on_submit():
-        user_tag = tagform.tag.data
-        parser_input = input_cleanup.input_prep(user_tag)
-        video_package = video_feed_parser.load(parser_input)
-        # send video_package to search result db
-        # return render_template('videofeed.html', video_package=video_package)
+#    if tagform.validate_on_submit():
+#        user_tag = tagform.tag.data
+#        parser_input = input_cleanup.input_prep(user_tag)
+#        video_package = video_feed_parser.load(parser_input)
+#        # send video_package to search result db
+#        # return render_template('videofeed.html', video_package=video_package)
         
-        # delete entries in db after pages are created? delete entries after user session is done?
+#        # delete entries in db after pages are created? delete entries after user session is done?
 
 
-    return render_template('videosearch.html', tagform=tagform)
+#    return render_template('videosearch.html', tagform=tagform)
 
 
 
@@ -175,9 +175,9 @@ def feed(user_tag):
 
 
 
-@main.route('/protected', methods=['GET', 'POST'])
+@main.route('/videosearch', methods=['GET', 'POST'])
 @login_required
-def protected():
+def videosearch():
     tagform = TagSearchForm()
 
     if tagform.validate_on_submit():
@@ -197,7 +197,7 @@ def protected():
 
         # return redirect(url_for('main.videofeed', video_id=video_id))
         # return redirect(url_for('main.videofeed', video_id=video_id))
-    return render_template('protected.html', tagform=tagform)
+    return render_template('videosearch.html', tagform=tagform)
 
 
 # for video file uploading
@@ -255,14 +255,11 @@ def videoupload():
         try:
             print("THIS IS request.form")
             print request.form
-            data = dict((key, request.form.getlist(key)) for key in request.form.keys())
-            print("THIS IS DATA:")
-            print(data)
-            print(type(data))
+            video_meta_data = dict((key, request.form.getlist(key)) for key in request.form.keys())
             videofile = request.files['file_attach']
             # send video metadata to uploader.py 
-            video_meta_data = uploader.meta_parser(data)
-            print(video_meta_data)
+            #video_meta_data = uploader.meta_parser(data)
+            #print(video_meta_data)
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)
@@ -276,7 +273,7 @@ def videoupload():
                 push_to_ovp = uploader.BCDI(video_asset_url, video_meta_data)
 
 
-            #return jsonify(message="Hello!")
+            return jsonify(message='hello')
             
         except Exception, e:
             print e

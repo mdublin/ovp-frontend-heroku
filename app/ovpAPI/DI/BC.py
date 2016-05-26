@@ -4,30 +4,32 @@
 # This is our Brightcove "module" containing both our oAuth procedure and the functions necessary for working with Brightcove's
 # Dynamic Ingest API
 
-print "Content-type: application/json\n\n"
+#print "Content-type: application/json\n\n"
 
 import httplib
 import urllib
 import base64
 import json
 import requests
+import os
 #import models
 
 # create video table object:
 #Video = models.Video()
 
-
-# Read the oauth secrets and account ID from our oauth configuration file "brightcove_oauth.txt" located in
-# same directory as our Python scripts
-
 def loadSecret():
-    credsFile = open('brightcove_oauth.json')
-    creds = json.load(credsFile)
-    return creds
+    print("called loadSecret")
+    try:
+        credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
+        creds = json.load(credsFile)
+        return creds
+    except IOError as e:
+        print(e)
 
 
 # get the oauth 2.0 token
 def getAuthToken(creds):
+    print("getAuthToken called")
     conn = httplib.HTTPSConnection("oauth.brightcove.com")
     url = "/v3/access_token"
     params = {
@@ -57,15 +59,21 @@ def getAuthToken(creds):
 # http://docs.brightcove.com/en/video-cloud/di-api/index.html
 
 def createVid(account, token, name, tags=[], description=""):
+    print("createVid called")
     url = 'https://cms.api.brightcove.com/v1/accounts/{}/videos/'.format(
         account)
+    print(url)
     headers = {"Authorization": "Bearer " +
                token, "Content-Type": "application/json"}
     data = {"name": name}
+    print(data)
     if tags:
         data["tags"] = tags
+        print(tags)
     if description:
         data["description"] = description
+        print(description)
+
     r = requests.post(url, data=json.dumps(data), headers=headers)
     res = json.loads(r.text)
     if "id" in res:
@@ -75,7 +83,8 @@ def createVid(account, token, name, tags=[], description=""):
 
 def ingestVid(account, token, vidId, videoUrl,
               profile="balanced-high-definition"):
-    url = 'https://cms.api.brightcove.com/v1/accounts/[INSERT YOUR BRIGHTCOVE ACCOUNT ID HERE]/videos/{}/ingest-requests'.format(
+    print("ingestVid called")
+    url = 'https://cms.api.brightcove.com/v1/accounts/{BRIGHTCOVE ACCOUNT ID}/videos/{}/ingest-requests'.format(
         vidId)
     headers = {"Authorization": "Bearer " +
                token, "Content-Type": "application/json"}
@@ -86,6 +95,7 @@ def ingestVid(account, token, vidId, videoUrl,
 
 
 def createAndIngest(name, vUrl, tags=[], description=""):
+    print("createAndIngest called")
     creds = loadSecret()
     token = getAuthToken(creds)
     account = creds["account_id"]
@@ -104,9 +114,10 @@ def createAndIngest(name, vUrl, tags=[], description=""):
 # method in the videoNameExists function.
 
 def videoNameExists(vidName):
+    print("videoNameExists called")
     vidName = vidName.encode("utf-8")
     bugFixVidName = vidName.replace(":", "")
-    search_url = 'https://api.brightcove.com/services/library?command=search_videos&video_fields=name&page_number=0&get_item_count=true&token=[Insert API read token here]&any=%22{}%22'.format(
+    search_url = 'https://api.brightcove.com/services/library?command=search_videos&video_fields=name&page_number=0&get_item_count=true&token={BRIGHTCOVE API READ TOKEN}&any=%22{}%22'.format(
         bugFixVidName)
 
     r = requests.get(search_url)
@@ -122,3 +133,4 @@ def videoNameExists(vidName):
             if name == vidName:  # -- does this name equal our original parameter?
                 return True
     return False
+
