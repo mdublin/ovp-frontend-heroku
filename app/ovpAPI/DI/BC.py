@@ -24,11 +24,11 @@ import os
 def loadSecret():
     print("called loadSecret")
     try:
-        credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
+        #credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
+        credsFile = open('brightcove_oauth.json')
         creds = json.load(credsFile)
         return creds
     except IOError as e:
-        print("INSIDE LOAD SECRET!!!")
         print(e)
 
 
