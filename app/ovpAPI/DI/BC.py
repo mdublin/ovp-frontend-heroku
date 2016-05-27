@@ -24,8 +24,10 @@ import os
 
 
 def loadSecret():
+    DIR = os.path.dirname(__file__)
+    foo = os.path.join(DIR, 'brightcove_oauth.json')
     try:
-        credsFile = open('brightcove_oauth.json')
+        credsFile = open(foo)
         creds = json.load(credsFile)
         return creds
     except IOError as e:
