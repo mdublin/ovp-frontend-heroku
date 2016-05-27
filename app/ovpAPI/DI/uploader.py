@@ -7,12 +7,16 @@ def convert(data):
     http://stackoverflow.com/questions/1254454/fastest-way-to-convert-a-dicts-keys-values-from-unicode-to-str
     '''
     if isinstance(data, basestring):
+        print(str(data))
         return str(data)
     elif isinstance(data, collections.Mapping):
+        print(dict(map(convert, data.iteritems())))
         return dict(map(convert, data.iteritems()))
     elif isinstance(data, collections.Iterable):
+        print(type(data)(map(convert, data)))
         return type(data)(map(convert, data))
     else:
+        print(data)
         return data
 
 
@@ -30,7 +34,7 @@ def meta_parser(data):
 
 
 
-def BCDI(video_asset_url, video_meta_data):
+def BCDI(video_meta_data):
     '''
     sends video metadata from
     videoupload form and video url from AWS S3 
@@ -43,23 +47,22 @@ def BCDI(video_asset_url, video_meta_data):
     tags = data['videoTags'][0]
     tags = tags.split(",")
     tags = filter(None, tags)
-    url = video_asset_url
+    #url = video_asset_url
+
+    return (name, tags, desc)
+
 
     #dedupe check for uploading
-    if not BC.videoNameExists(name):
-        print("did not see video, submitting to OVP CMS...")
-        print(name, url, tags, desc)
-        print(type(name), type(url), type(tags), type(desc))
-        create_video = BC.createAndIngest(name, url, tags, desc)
-        print("after create_video")
-        return create_video
+    #if not BC.videoNameExists(name):
+    #    print("did not see video, submitting to OVP CMS...")
+    #    print(name, url, tags, desc)
+    #    print(type(name), type(url), type(tags), type(desc))
+    #    create_video = BC.createAndIngest(name, url, tags, desc)
+    #    print("after create_video")
+    #    return create_video
 
-    else:
-        print "video was found in OVP CMS.."
-
-
-
-
+    #else:
+    #    print "video was found in OVP CMS.."
 
 #tags = tags.split(",")
 #clean up

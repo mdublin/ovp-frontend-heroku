@@ -239,6 +239,8 @@ def uploaded_file(filename):
 
 # new video upload w/AJAX
 
+
+from ..ovpAPI.DI import BC
 from ..ovpAPI.DI import uploader
 from ..ovpAPI import AWS_S3_test
 
@@ -259,7 +261,7 @@ def videoupload():
             videofile = request.files['file_attach']
             # send video metadata to uploader.py 
             #video_meta_data = uploader.meta_parser(data)
-            #print(video_meta_data)
+           #print(video_meta_data)
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)
@@ -269,8 +271,10 @@ def videoupload():
                 video_asset_url = AWS_S3_test.AWSConnector(filename)
                 print(video_asset_url)
 
-                # send video_asset_url and metadata to BC DI script
-                push_to_ovp = uploader.BCDI(video_asset_url, video_meta_data)
+                # send clean up metadata
+                getMetaData = uploader.BCDI(video_meta_data)
+                # send metadata and source file URL to BC.py
+                push_to_ovp = BC.createAndIngest(getMetaData, video_asset_url)
 
                 return jsonify(message=push_to_ovp)
 
