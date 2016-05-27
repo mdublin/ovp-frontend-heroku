@@ -271,6 +271,9 @@ def videoupload():
 
                 # send video_asset_url and metadata to BC DI script
                 push_to_ovp = uploader.BCDI(video_asset_url, video_meta_data)
+                print("push_to_ovp: ")
+                print(push_to_ovp)
+
                 return jsonify(message=push_to_ovp)
 
             return jsonify(message='hello')
