@@ -31,7 +31,7 @@ def loadSecret():
     print("called loadSecret")
     try:
         #credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
-        credsFile = open(oauthPath, 'r')
+        credsFile = open(oauthPath, )
         creds = json.load(credsFile)
         return creds
     except IOError as e:
