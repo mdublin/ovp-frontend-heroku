@@ -7,16 +7,12 @@ def convert(data):
     http://stackoverflow.com/questions/1254454/fastest-way-to-convert-a-dicts-keys-values-from-unicode-to-str
     '''
     if isinstance(data, basestring):
-        print(str(data))
         return str(data)
     elif isinstance(data, collections.Mapping):
-        print(dict(map(convert, data.iteritems())))
         return dict(map(convert, data.iteritems()))
     elif isinstance(data, collections.Iterable):
-        print(type(data)(map(convert, data)))
         return type(data)(map(convert, data))
     else:
-        print(data)
         return data
 
 
