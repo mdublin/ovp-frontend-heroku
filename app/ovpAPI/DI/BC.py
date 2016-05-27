@@ -21,16 +21,15 @@ import os
 # Read the oauth secrets and account ID from our oauth configuration file "brightcove_oauth.txt" located in
 # same directory as our Python scripts
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-oauthPath = os.path.join(PROJECT_ROOT, 'brightcove_oauth.json')
-print("oauthPath: ")
-print oauthPath
-#ovpAPI_URL = '/ovpAPI/'
-
 
 
 def loadSecret():
     print("called loadSecret")
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+oauthPath = os.path.join(PROJECT_ROOT, 'brightcove_oauth.json')
+print("oauthPath: ")
+print oauthPath
+
     try:
         #credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
         credsFile = open(oauthPath, )
