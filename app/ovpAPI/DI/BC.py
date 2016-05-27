@@ -25,7 +25,7 @@ import os
 
 def loadSecret():
     DIR = os.path.dirname(__file__)
-    foo = os.path.join(DIR, 'brightcove_oauth.json')
+    foo = os.path.join(DIR, 'bcoauth.json')
     try:
         credsFile = open(foo)
         creds = json.load(credsFile)
