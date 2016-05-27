@@ -25,6 +25,8 @@ import os
 
 def loadSecret():
     DIR = os.path.dirname(__file__)
+    print("printing os.path.dirname(__file__) in loadSecret(): ")
+    print(DIR)
     foo = os.path.join(DIR, 'bcoauth.json')
     try:
         credsFile = open(foo)
