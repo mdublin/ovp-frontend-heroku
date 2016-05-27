@@ -26,9 +26,9 @@ import os
 def loadSecret():
     print("called loadSecret")
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-oauthPath = os.path.join(PROJECT_ROOT, 'brightcove_oauth.json')
-print("oauthPath: ")
-print oauthPath
+    oauthPath = os.path.join(PROJECT_ROOT, 'brightcove_oauth.json')
+    print("oauthPath: ")
+    print oauthPath
 
     try:
         #credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
