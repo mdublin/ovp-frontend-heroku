@@ -52,6 +52,7 @@ def BCDI(video_asset_url, video_meta_data):
         print(type(name), type(url), type(tags), type(desc))
         create_video = BC.createAndIngest(name, url, tags, desc)
         print("after create_video")
+        return create_video
 
     else:
         print "video was found in OVP CMS.."
