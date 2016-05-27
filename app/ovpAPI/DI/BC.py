@@ -22,8 +22,8 @@ import os
 # same directory as our Python scripts
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-ovpAPI_ROOT = os.path.join(PROJECT_ROOT, 'ovpAPI')
-ovpAPI_URL = '/ovpAPI/'
+oauthPath = os.path.join(PROJECT_ROOT, 'DI/brightcove_oauth.json')
+#ovpAPI_URL = '/ovpAPI/'
 
 
 
@@ -31,8 +31,7 @@ def loadSecret():
     print("called loadSecret")
     try:
         #credsFile = open('./app/ovpAPI/DI/brightcove_oauth.json')
-        #credsFile = open(ovpAPI_ROOT, 'brightcove_oauth.json')
-        credsFile = open('~/app/ovpAPI/DI/brightcove_oauth.json')
+        credsFile = open(oauthPath, 'r')
         creds = json.load(credsFile)
         return creds
     except IOError as e:
