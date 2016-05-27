@@ -22,7 +22,7 @@ import os
 # same directory as our Python scripts
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-oauthPath = os.path.join(PROJECT_ROOT, 'DI/brightcove_oauth.json')
+oauthPath = os.path.join(PROJECT_ROOT, 'brightcove_oauth.json')
 #ovpAPI_URL = '/ovpAPI/'
 
 
