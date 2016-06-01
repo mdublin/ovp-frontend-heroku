@@ -80,9 +80,11 @@ form.addEventListener('submit', function(ev) {
   oReq.onload = function(oEvent) {
 	  if (oReq.status == 200) {
 		  //alert("200 status");
-		  //window.location.replace("http://127.0.0.1:8000/uploadsuccess");
+	  var ovpResponse = oReq.responseText;
+	  alert(ovpResponse)
+	  window.location.replace("http://127.0.0.1:8000/uploadsuccess");
 		//redirect URL for Heroku deployment
-		  window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
+		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";
     } else {
       oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
