@@ -37,7 +37,7 @@
 
 
 
-<form id="videoform" name="bootform" form>
+<form id="videoform" method="POST" name="bootform" enctype="multipart/form-data" form>
 	<div id="form_results"></div>
 	<fieldset class="form-group">
     <label for="exampleTextarea">Title</label>
@@ -66,6 +66,7 @@
 <!-- keep it simple, stupid — AJAX from MDN docs, where all things work better than Stackoverflow/googling results: 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects  --!>
 
+<!--
 <script>
 var form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
@@ -97,7 +98,7 @@ form.addEventListener('submit', function(ev) {
 
 </script>
 
-       
+--!>
 
 
 
