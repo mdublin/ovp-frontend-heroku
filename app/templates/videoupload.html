@@ -89,9 +89,9 @@ form.addEventListener('submit', function(ev) {
 		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";
          //local dev:
-  		//$('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) { 
+  		$('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) { 
 	  
-  		$('#foo').load('https://ovp-frontend-framework.herokuapp.com/uploadsuccess #foo', function( response, status, xhr  ) { 
+  		//$('#foo').load('https://ovp-frontend-framework.herokuapp.com/uploadsuccess #foo', function( response, status, xhr  ) { 
 			if ( oReq.status == "error"  ) { 
 			  var msg = "sorry"; 
 			  $( "#result" ).html( msg + oReq.status + " " + oReq.statusText  );  
