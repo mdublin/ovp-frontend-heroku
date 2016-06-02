@@ -37,7 +37,8 @@
 
 
 
-<form id="videoform" method="POST" name="bootform" enctype="multipart/form-data" form>
+<!--<form id="videoform" method="POST" name="bootform" enctype="multipart/form-data" form>--!>
+<form id="videoform" name="bootform" form>
 	<div id="form_results"></div>
 	<fieldset class="form-group">
     <label for="exampleTextarea">Title</label>
@@ -60,13 +61,12 @@
   <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
 </form>
 
-
-
+<div id="foo"></div>
 
 <!-- keep it simple, stupid — AJAX from MDN docs, where all things work better than Stackoverflow/googling results: 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects  --!>
 
-<!--
+
 <script>
 var form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
@@ -82,12 +82,28 @@ form.addEventListener('submit', function(ev) {
 	  if (oReq.status == 200) {
 		  //alert("200 status");
 	  var ovpResponse = oReq.responseText;
-	  alert(ovpResponse)
-	  window.location.replace("http://127.0.0.1:8000/uploadsuccess");
+	  $('#result').html(ovpResponse);
+
+	  $('form').hide();
+
+	  //$('#foo').load('/uploadsuccess #foo', )
+	  //$('#result').html(ovpResponse);
+		//window.location.replace("http://127.0.0.1:8000/uploadsuccess");
 		//redirect URL for Heroku deployment
 		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";
-    } else {
+  	  $('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) { 
+		  if ( oReq.status == "error"  ) { 
+			  var msg = "sorry"; 
+			  $( "#result" ).html( msg + oReq.status + " " + oReq.statusText  );  
+		  }
+		  else {
+			  $('#result').html(ovpResponse);
+		  }
+	  });
+	  
+	  
+	  } else {
       oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
     }
   };
@@ -97,9 +113,6 @@ form.addEventListener('submit', function(ev) {
 }, false);
 
 </script>
-
---!>
-
 
 
 {% endblock %}

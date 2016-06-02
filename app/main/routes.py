@@ -283,8 +283,8 @@ def videoupload():
                 push_to_ovp = BC.createAndIngest(name, vUrl, tags, description)
                 DIresponse=push_to_ovp
                 print(push_to_ovp)
-                #return jsonify(message=push_to_ovp)
-                return redirect(url_for('main.uploadsuccess', DIresponse=DIresponse)) 
+                return jsonify(message=push_to_ovp)
+                #return redirect(url_for('main.uploadsuccess', DIresponse=DIresponse)) 
             #return jsonify(message='hello')
             
         except Exception, e:
@@ -294,9 +294,9 @@ def videoupload():
 
 
 @main.route('/uploadsuccess', methods=['GET', 'POST'])
-def uploadsuccess(DIresponse):
-    print "uploadsuccess receiving DIresponse: "
-    print(DIresponse)
+def uploadsuccess():
+    #print "uploadsuccess receiving DIresponse: "
+    #print(DIresponse)
     return render_template('uploadsuccess.html')
 
 
