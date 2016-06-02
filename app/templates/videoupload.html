@@ -86,14 +86,13 @@ form.addEventListener('submit', function(ev) {
 
 	  $('form').hide();
 
-	  //$('#foo').load('/uploadsuccess #foo', )
-	  //$('#result').html(ovpResponse);
-		//window.location.replace("http://127.0.0.1:8000/uploadsuccess");
-		//redirect URL for Heroku deployment
 		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";
-  	  $('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) { 
-		  if ( oReq.status == "error"  ) { 
+         //local dev:
+  		//$('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) { 
+	  
+  		$('#foo').load('https://ovp-frontend-framework.herokuapp.com/uploadsuccess #foo', function( response, status, xhr  ) { 
+			if ( oReq.status == "error"  ) { 
 			  var msg = "sorry"; 
 			  $( "#result" ).html( msg + oReq.status + " " + oReq.statusText  );  
 		  }
