@@ -281,9 +281,12 @@ def videoupload():
 
                 # send metadata and source file URL to BC.py
                 push_to_ovp = BC.createAndIngest(name, vUrl, tags, description)
-                DIresponse=push_to_ovp
-                print(push_to_ovp)
-                return jsonify(message=push_to_ovp)
+                DIresponse=push_to_ovp[0]
+                print("DIresponse is here: ")
+                print(DIresponse)
+                # just BC video ID
+                return (DIresponse)
+                #return jsonify(message=BC_video_id)
                 #return redirect(url_for('main.uploadsuccess', DIresponse=DIresponse)) 
             #return jsonify(message='hello')
             
