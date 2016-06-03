@@ -13,10 +13,10 @@
 <div class="jumbotron" id='foo'>
 	<h1><newnav>Success!</newnav></h1>
 	<p>Brightcove Video ID:</p><div id="result"></div>
-	 <button class="btn btn-primary btn-lg" data-clipboard-text="result">Copy Video ID</button> 
+	 <button class="btn" data-clipboard-text="#result">Copy Video ID</button> 
                <script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
                <script>
-               var clipboard = new Clipboard('.btn btn-primary btn-lg');
+               var clipboard = new Clipboard('.btn');
 
                clipboard.on('success', function(e) {
                    console.log(e);
