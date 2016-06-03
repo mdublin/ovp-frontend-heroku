@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Media{% endblock %}
+
+
+{% block page_content %}
+<body background="{{ url_for('static', filename = 'whtntv4.jpg') }}"> 
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+        href="{{url_for('static', filename='newstyle.css')}}">
+    {% endblock %}
+    <textblock>
+    <h1>Search Media</h1>
+    <p>This page can only be viewed by logged in users.</p>
+    <p>You are logged in as <b>{{ current_user.username }}</b>.</p>
+
+
+
+{% for dict in video_package %}
+
+<div class="list-group">
+	<a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}">
+		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
+		<img src={{ dict["thumbnail"] }} alt="...">
+	  	<p class="list-group-item-text">{{ dict["description"] }}</p>	
+   		<p class="list-group-item-text">Some info here</p>
+	</a>
+</div>
+
+ {% endfor %}
+
+
+
+
+
+{% endblock %}
