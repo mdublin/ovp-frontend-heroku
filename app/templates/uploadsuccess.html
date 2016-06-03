@@ -9,27 +9,16 @@
 <link rel="stylesheet" href="{{url_for('static', filename='newstyle.css')}}">
 
 
-<div class="span7 text-center">
-<div class="jumbotron" id='foo'>
+<div class="span7 text-center" id='foo'>
+<div class="jumbotron">
 	<h1><newnav>Success!</newnav></h1>
-	<p>Brightcove Video ID:</p><div id="result"></div>
-	<input id="BCID" value="result">
-	 <button class="btn" data-clipboard-target="#BCID">Copy Video ID</button> 
-               <script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
-               <script>
-               var clipboard = new Clipboard('.btn');
-
-               clipboard.on('success', function(e) {
-                   console.log(e);
-               });
-               clipboard.on('error', function(e) {
-                   console.log(e);
-               });
-               </script>
-               <!-- END of clipboard.js button for video source file URL --!>
+	<div1>Brightcove Video ID:</div1><div2 id="result"></div2>
+	<br></br>
+	<button class="btn" data-clipboard-target="#result">Copy Video ID</button>
+	<br></br>
 		<p><a class="btn btn-primary btn-lg" href="{{ url_for('main.videoupload')  }}" role="button">Upload Another Video</a></p>
 	</div>
   </div>
-	{% endblock %}
+  {% endblock %}
 
 

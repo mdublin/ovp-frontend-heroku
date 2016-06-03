@@ -61,7 +61,28 @@
   <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
 </form>
 
+
+<!-- form loaded by AJAX --!>
 <div id="foo"></div>
+<!-- js script that works with clipboard button loaded into this div via AJAX --!>
+<script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
+<script>
+var clipboard = new Clipboard('.btn');
+
+clipboard.on('success', function(e) {
+	console.log(e);
+	alert("copied!");
+    });
+clipboard.on('error', function(e) {
+	console.log(e);
+	alert(e);
+    });
+</script>
+<!-- END of clipboard.js button for video source file URL --!>
+
+
+
+
 
 <!-- keep it simple, stupid — AJAX from MDN docs, where all things work better than Stackoverflow/googling results: 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects  --!>
