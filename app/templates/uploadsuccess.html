@@ -13,6 +13,19 @@
 <div class="jumbotron" id='foo'>
 	<h1><newnav>Success!</newnav></h1>
 	<p>Brightcove Video ID:</p><div id="result"></div>
+	 <button class="btn btn-primary btn-lg" data-clipboard-text="result">Copy Video ID</button> 
+               <script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
+               <script>
+               var clipboard = new Clipboard('.btn');
+
+               clipboard.on('success', function(e) {
+                   console.log(e);
+               });
+               clipboard.on('error', function(e) {
+                   console.log(e);
+               });
+               </script>
+               <!-- END of clipboard.js button for video source file URL --!>
 		<p><a class="btn btn-primary btn-lg" href="{{ url_for('main.videoupload')  }}" role="button">Upload Another Video</a></p>
 	</div>
   </div>
