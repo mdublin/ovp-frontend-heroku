@@ -16,7 +16,7 @@
 	 <button class="btn btn-primary btn-lg" data-clipboard-text="result">Copy Video ID</button> 
                <script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
                <script>
-               var clipboard = new Clipboard('.btn');
+               var clipboard = new Clipboard('.btn btn-primary btn-lg');
 
                clipboard.on('success', function(e) {
                    console.log(e);
