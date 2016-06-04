@@ -308,8 +308,14 @@ def uploadsuccess():
 @login_required
 def mediaload():
     
-    # initial load 
-    #if user_tag == None:
+    tagform = TagSearchForm()
+
+    if tagform.validate_on_submit():
+        # the actual user-submitted text in the tag field is accessed this way (it is a Unicode object)
+        # extracting from type <class 'wtforms.widgets.core.HTMLString'> object
+        # POST request sends this via tagform.tag object: <input id="tag"
+        # name="tag" type="text" value="THIS IS A TAG">
+        user_tag = tagform.tag.data
 
         
 
@@ -329,7 +335,7 @@ def mediaload():
     #return render_template('media.html', video_package=video_package, page=page, tag=user_tag)
 
     #return render_template('media.html', video_package=video_package, page=page)
-    return render_template('media.html', video_package=video_package)
+    return render_template('media.html', video_package=video_package, tagform=tagform)
 
 
 

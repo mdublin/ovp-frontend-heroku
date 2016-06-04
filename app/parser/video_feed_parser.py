@@ -177,8 +177,6 @@ def mediaload(page, results_per_page):
         max_bitrate = 0
         vid_url = None
         videos = post.media_content
-        
-
 
         # get thumbnail image URL 
         thumbnails = post.media_thumbnail
@@ -193,7 +191,6 @@ def mediaload(page, results_per_page):
                 height = thumbnail['height']
                 if height == '90':
                     thumbnail_url = thumbnail['url']
-
 
 
         tags = post.media_keywords
