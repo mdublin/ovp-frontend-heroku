@@ -17,26 +17,32 @@
     <h1>Search Media</h1>
 	<p>You are logged in as <b>{{ current_user.username }}</b>.</p>
 
-    <p>*Separate tags with a comma; no tag > 128 characters</p>
-		<div class="row">
-           <div class="col-md-3">
-               {{ wtf.quick_form(tagform) }}
-           </div>
-       </div> 
+	   
+<!-- new Boostrap form to be used with AJAX --!>	   
+	
+	<form id="searchform" name="bootform" form>
+  	<fieldset class="form-group">
+    	<label for="tagsearch">Search by tag:</label>
+    	<input type="text" class="form-control" id="tagsearch">
+    	<small class="text-muted">*Separate tags with a comma; no tag > 128 characters</small>
+  	</fieldset>
+  	<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
 
 
-	   <!-- this is the pagination just for the general media load on /media   --!>
+
+	   <!-- this is the pagination just for the general media load on /media --!>
 	   <nav>
 		<ul class="pager">
 		{% if page > 1 %}
-		<li><a href="{{ url_for('main.mediafeed', page=(page - 1)) }}"><b>Previous</b></a></li>
+		<li><a href="{{ url_for('main.media', page=(page - 1)) }}"><b>Previous</b></a></li>
         {% endif %}
-		<li><a href="{{ url_for('main.mediafeed', page=(page + 1)) }}"><b>Next</b></a></li>
+		<li><a href="{{ url_for('main.media', page=(page + 1)) }}"><b>Next</b></a></li>
       </ul>
     </nav>
 
 
-
+	<!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
 
 <div class="list-group">
@@ -51,6 +57,50 @@
  {% endfor %}
 
 
+<script>
+	
+var form = document.forms.namedItem("bootform");
+form.addEventListener('submit', function(ev) {
+
+  var oOutput = document.querySelector("div"),
+      oData = new FormData(form);
+
+  var oReq = new XMLHttpRequest();
+  
+  
+  oReq.open("POST", "/media", true);
+  oReq.onload = function(oEvent) {
+	  if (oReq.status == 200) {
+		  //alert("200 status");
+	  var ovpResponse = oReq.responseText;
+	  $('#result').html(ovpResponse);
+
+	  $('form').hide();
+
+		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
+      //oOutput.innerHTML = "Uploaded!";
+         //local dev:
+  		$('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) {
+			if ( oReq.status == "error"  ) { 
+			  var msg = "sorry"; 
+			  $( "#result" ).html( msg + oReq.status + " " + oReq.statusText  );  
+		  }
+		  else {
+			  $('#result').html(ovpResponse);
+		  }
+	  });
+	  
+	  
+	  } else {
+      oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
+    }
+  };
+
+  oReq.send(oData);
+  ev.preventDefault();
+}, false);
+
+</script>
 
 
 
