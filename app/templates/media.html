@@ -24,6 +24,18 @@
            </div>
        </div> 
 
+
+	   <nav>
+		<ul class="pager">
+		{% if page > 1 %}
+		<li><a href="{{ url_for('main.mediafeed', page=(page - 1)) }}"><b>Previous</b></a></li>
+        {% endif %}
+		<li><a href="{{ url_for('main.mediafeed', page=(page + 1)) }}"><b>Next</b></a></li>
+      </ul>
+    </nav>
+
+
+
 {% for dict in video_package %}
 
 <div class="list-group">
