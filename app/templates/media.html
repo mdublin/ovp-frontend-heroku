@@ -25,6 +25,7 @@
        </div> 
 
 
+	   <!-- this is the pagination just for the general media load on /media   --!>
 	   <nav>
 		<ul class="pager">
 		{% if page > 1 %}
@@ -41,7 +42,7 @@
 <div class="list-group">
 	<a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}">
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
-		<img src={{ dict["thumbnail"] }} alt="...">
+		<img src={{ dict["thumbnail"] }} height="90" width="160">
 	  	<p class="list-group-item-text">{{ dict["description"] }}</p>	
    		<p class="list-group-item-text">Some info here</p>
 	</a>
