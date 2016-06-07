@@ -306,7 +306,6 @@ def uploadsuccess():
 @main.route('/media', methods=['GET', 'POST'])
 @login_required
 def media():
-    print "THIS IS BEING CALLED"
     # check for AJAX POST request to this endpoint from tag search Boostrap form on /media enpoint
     if request.method == "POST":
         print("POST CALLED!")
@@ -314,30 +313,42 @@ def media():
             print("THIS IS request.form")
             print request.form
             #get tags from ImmutableMultiDict
-            video_meta_data = dict((key, request.form.getlist(key)) for key in request.form.keys())
-            videofile = request.files['file_attach']
+            tag_submission = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            print (tag_submission)
+
+            # get value of 'tag' key, which are the tags submitted in the form
+            tag_submission = tag_submission['tag'][0]
+            
             # clean up tag submission
-            parser_input = input_cleanup.input_prep(user_tag)
+            #parser_input = input_cleanup.input_prep(user_tag)
 
             page = request.args.get('page', 1)
             print("THIS IS page in feed(): %s" % page)
             #converting page from Unicode to int for passing to d.entries slice operation in load()
             page = int(page)
             #sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
-            video_package = video_feed_parser.load(parser_input, page, RESULTS_PER_PAGE)
-            
-            
+
+            # if tag_submission contains more than one tag, strip it out of list, get ride of commas, and change encoding from Unicode to regular string
+            tag_clean = [str(x.strip()) for x in tag_submission.split(',')]
+            if len(tag_clean) == 1:
+                print("INSIDE len()")
+                print("tag inside if len(:)")
+                print(tag_clean)
+                video_package = video_feed_parser.load(tag_clean, page, RESULTS_PER_PAGE)
+                print(type(video_package))
+                return render_template('media.html', video_package=video_package, tag=tag_clean)
+ 
             # AJAX in /media has to do what this return function does, load videofeed.html and feed parameters to that template 
-            return render_template('videofeed.html', video_package=video_package, page=page, tag=user_tag)
             
         except Exception, e:
             print e
  
+    
     page = request.args.get('page', 1)
     #converting page from Unicode to int for passing to d.entries slice operation in load()
     page = int(page)
     
-    #sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
+    # sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
     video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
 
     # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?

@@ -19,17 +19,18 @@
 
 	   
 <!-- new Boostrap form to be used with AJAX --!>	   
-	
-	<form id="searchform" name="bootform" form>
-  	<fieldset class="form-group">
-    	<label for="tagsearch">Search by tag:</label>
-    	<input type="text" class="form-control" id="tagsearch">
-    	<small class="text-muted">*Separate tags with a comma; no tag > 128 characters</small>
-  	</fieldset>
-  	<button type="submit" class="btn btn-primary">Submit</button>
-	</form>
 
-
+<form id="videoform" name="bootform" form>
+	<div id="form_results"></div>
+	<fieldset class="form-group">
+    <label for="exampleTextarea">Enter search tag:</label>
+	<textarea class="form-control" name="tag" id="tagform" rows="1"></textarea>
+	<small class="text-muted">*Separate tags with a comma; no tag > 128 characters</small>
+  </fieldset>
+	<small class="text-muted"></small>
+  </fieldset>
+  <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+</form>
 
 	   <!-- this is the pagination just for the general media load on /media --!>
 	   <nav>
@@ -58,12 +59,17 @@
 
 
 <script>
-	
-var form = document.forms.namedItem("bootform");
+var form;	
+form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
 
+	alert("event listener called");
+
+
   var oOutput = document.querySelector("div"),
-      oData = new FormData(form);
+	  oData = new FormData(form);
+
+  alert(oData);
 
   var oReq = new XMLHttpRequest();
   
@@ -73,9 +79,10 @@ form.addEventListener('submit', function(ev) {
 	  if (oReq.status == 200) {
 		  //alert("200 status");
 	  var ovpResponse = oReq.responseText;
-	  $('#result').html(ovpResponse);
+		  alert(ovpResponse);
+		  //$('#result').html(ovpResponse);
 
-	  $('form').hide();
+	  //$('form').hide();
 
 		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";

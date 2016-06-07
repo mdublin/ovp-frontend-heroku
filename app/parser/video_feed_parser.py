@@ -4,16 +4,10 @@
 print "Content-type: application/json\n\n"
 import feedparser
 
-#from ..models import SearchResult
-
 
 # receiving user_tag text submitted by user via TagSearchForm on
 # http://127.0.0.1:5000/protected
 def load(parser_input, page, results_per_page):
-
-    print("THIS IS parser_input")
-    print(parser_input)
-    print(type(parser_input))
 
     # checking parser_input object type
     if isinstance(parser_input, str):
@@ -26,14 +20,10 @@ def load(parser_input, page, results_per_page):
         for tag in parser_input:
             urlencode = "&any=tag:" + tag
             tags_insert += urlencode
-        print("THIS IS tags_insert:")
-        print(tags_insert)
 
         video_feed = 'http://api.brightcove.com/services/library?command=search_videos{}&output=mrss&media_delivery=http&sort_by=CREATION_DATE:DESC&token=8-XmRYT4C6VKYvvCGoJhcaGFX-t7ZO-ML3eXD95oalq6obm5ho7eJg..'.format(
             tags_insert)
 
-    print("THIS IS video_feed:")
-    print(video_feed)
 
     d = feedparser.parse(video_feed)
 
@@ -43,9 +33,6 @@ def load(parser_input, page, results_per_page):
     # iterated through, videofeed.html endpoint with jinja2 control structures
     asset_return_list = []
 
-    print("THIS IS PAGE: ")
-    print(page)
-    print(type(page))
 
     # -- For each item in the feed
     # The value of ====> (page - 1) * results_per_page  == Start point in feed
@@ -150,10 +137,6 @@ def mediaload(page, results_per_page):
     # list returned of dicts for each video, this will be sent to, and
     # iterated through, videofeed.html endpoint with jinja2 control structures
     asset_return_list = []
-
-    print("THIS IS PAGE: ")
-    print(page)
-    print(type(page))
 
     # -- For each item in the feed
     # The value of ====> (page - 1) * results_per_page  == Start point in feed

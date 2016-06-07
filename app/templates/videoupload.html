@@ -84,7 +84,7 @@ clipboard.on('error', function(e) {
 
 
 
-<!-- keep it simple, stupid — AJAX from MDN docs, where all things work better than Stackoverflow/googling results: 
+<!-- keep it simple — AJAX from MDN docs, where all things work better than Stackoverflow/googling results: 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects  --!>
 
 
@@ -92,8 +92,8 @@ https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
 var form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
 
-  var oOutput = document.querySelector("div"),
-      oData = new FormData(form);
+    var oOutput = document.querySelector("div"),
+    oData = new FormData(form);
 
   //oData.append("CustomField", "This is some extra data");
 
