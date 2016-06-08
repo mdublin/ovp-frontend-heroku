@@ -17,7 +17,10 @@
     <h1>Search Media</h1>
 	<p>You are logged in as <b>{{ current_user.username }}</b>.</p>
 
-	   
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<!-- AJAX form load --!>
+
 <!-- new Boostrap form to be used with AJAX --!>	   
 
 <form id="videoform" name="bootform" form>
@@ -43,10 +46,10 @@
     </nav>
 
 
-	<!-- loop through video_package object for general load on /media --!>
+<!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
 
-<div class="list-group">
+<div class="list-group" >
 	<a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}">
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
 		<img src={{ dict["thumbnail"] }} height="90" width="160">
@@ -57,6 +60,30 @@
 
  {% endfor %}
 
+
+
+
+<script>
+
+	var videopackage = 5;
+	var balls = document.querySelector("foo");
+	for (var i =0; videopackage.length; i++) {
+
+		newdiv = document.createElement('balls');
+	}
+	
+
+</script>
+
+
+
+
+
+	<div>
+
+ <div class="list-group" id="foo"></div>
+
+ </div>
 
 <script>
 var form;	
@@ -82,12 +109,12 @@ form.addEventListener('submit', function(ev) {
 		  alert(ovpResponse);
 		  //$('#result').html(ovpResponse);
 
-	  //$('form').hide();
+	  $('defaultMedia').hide();
 
 		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
       //oOutput.innerHTML = "Uploaded!";
          //local dev:
-  		$('#foo').load('/uploadsuccess #foo', function( response, status, xhr  ) {
+  		$('#foo').load('/mediaTest #foo', function( response, status, xhr  ) {
 			if ( oReq.status == "error"  ) { 
 			  var msg = "sorry"; 
 			  $( "#result" ).html( msg + oReq.status + " " + oReq.statusText  );  

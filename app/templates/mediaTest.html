@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Media{% endblock %}
+
+
+{% block page_content %}
+
+    
+    {% block styles %}
+    {{super()}}
+    <link rel="stylesheet"
+        href="{{url_for('static', filename='newstyle.css')}}">
+    {% endblock %}
+	   
+
+
+<!-- JS loop inserts Boostrap videoasset module here --!>
+
+<div id="insertHere"></div>
+
+
+{% endblock %}
+
+
+<body onload="videoModule()">
+
+<script>
+
+function videoModule() {
+
+		var vidMod;
+		vidMod = document.querySelector("#insertHere");
+
+		for (var i=0; i < 4; i++){
+		var div = document.createElement('div');
+		
+		div.innerHTML += '<div class="list-group"><a href="http://127.0.0.1:8000/" class="list-group-item active"><h4 class="list-group-item-heading">TEST</h4><img src="#" height="90" width="160"><p class="list-group-item-text">TEST</p><p class="list-group-item-text">Some info here</p></a></div>';
+		
+		vidMod.appendChild(div);
+
+		};	
+
+	};
+
+//instantiate/call function
+var createVidMod = videoModule();
+
+
+// in Chrome in console, load entire function videoModule(){....} then you can call var createVidMod = videoModule(); in the next prompt, and it loads all the modules in the page 
+
+</script>
