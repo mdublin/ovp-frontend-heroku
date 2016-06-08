@@ -13,7 +13,11 @@
     <link rel="stylesheet"
         href="{{url_for('static', filename='newstyle.css')}}">
     {% endblock %}
-	   
+
+
+	<!-- testing button to call videoModule() function just to populate page --!>
+<input type="button" value="Run vidMod Loop (for testing only)" onclick="videoModule()"/>
+
 
 
 <!-- JS loop inserts Boostrap videoasset module here --!>
@@ -21,12 +25,13 @@
 <div id="insertHere"></div>
 
 
-{% endblock %}
 
-
-<body onload="videoModule()">
 
 <script>
+
+//test array
+var links = ["https://s-media-cache-ak0.pinimg.com/236x/3a/a8/96/3aa8969f3c87fe2bc4a9b39a7c620a26.jpg", "https://s-media-cache-ak0.pinimg.com/236x/e7/66/a7/e766a7080284d50c0ca0385e6213491e.jpg", "http://i940.photobucket.com/albums/ad246/swatfranchise/Constant%20Leads/Dec%2007%20-%2013/Pitbulls/AmericanPitbullTerrier_zpsafe34e59.jpg"]
+
 
 function videoModule() {
 
@@ -34,20 +39,29 @@ function videoModule() {
 		vidMod = document.querySelector("#insertHere");
 
 		for (var i=0; i < 4; i++){
-		var div = document.createElement('div');
+
+			var idxID = i;
+            var picLink = links[i];
+			var div = document.createElement('div');
 		
-		div.innerHTML += '<div class="list-group"><a href="http://127.0.0.1:8000/" class="list-group-item active"><h4 class="list-group-item-heading">TEST</h4><img src="#" height="90" width="160"><p class="list-group-item-text">TEST</p><p class="list-group-item-text">Some info here</p></a></div>';
+			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href="http://127.0.0.1:8000/" class="list-group-item active"><h4 class="list-group-item-heading">TEST</h4><img src='+picLink+' height="90" width="160"><p class="list-group-item-text">TEST</p><p class="list-group-item-text">Some info here</p></a></div>';
 		
-		vidMod.appendChild(div);
+			vidMod.appendChild(div);
 
 		};	
 
 	};
 
 //instantiate/call function
-var createVidMod = videoModule();
+//var createVidMod = videoModule();
 
 
 // in Chrome in console, load entire function videoModule(){....} then you can call var createVidMod = videoModule(); in the next prompt, and it loads all the modules in the page 
 
 </script>
+
+
+<!-- everything has to be inside the jinja2 block, including JS script --!>
+{% endblock %}
+
+
