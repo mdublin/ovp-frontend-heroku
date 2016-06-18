@@ -24,7 +24,6 @@ def load(parser_input, page, results_per_page):
         video_feed = 'http://api.brightcove.com/services/library?command=search_videos{}&output=mrss&media_delivery=http&sort_by=CREATION_DATE:DESC&token=8-XmRYT4C6VKYvvCGoJhcaGFX-t7ZO-ML3eXD95oalq6obm5ho7eJg..'.format(
             tags_insert)
 
-
     d = feedparser.parse(video_feed)
 
     response_array = []
@@ -32,7 +31,6 @@ def load(parser_input, page, results_per_page):
     # list returned of dicts for each video, this will be sent to, and
     # iterated through, videofeed.html endpoint with jinja2 control structures
     asset_return_list = []
-
 
     # -- For each item in the feed
     # The value of ====> (page - 1) * results_per_page  == Start point in feed
@@ -57,7 +55,6 @@ def load(parser_input, page, results_per_page):
         vid_url = None
         videos = post.media_content
         tags = post.media_keywords
-        print(tags)
 
         # -- For each video in the item dict
         for video in videos:
@@ -98,8 +95,6 @@ def load(parser_input, page, results_per_page):
     #video_package = {}
     for asset_dict in response_array:
         video_package = {}
-        print("THIS IS ASSET_DICT on line 100")
-        print(asset_dict)
         extract_sourcefile_tupe = asset_dict['url']
         extract_videoID_tupe = asset_dict['videoID']
         extract_name_tupe = asset_dict['name']
@@ -114,8 +109,6 @@ def load(parser_input, page, results_per_page):
                 'tags': extract_tags_tupe,
                 'url': extract_sourcefile_tupe})
         asset_return_list.append(video_package)
-
-    print(asset_return_list)
 
     # send results to db
    # SearchResult.store(asset_return_list)
@@ -145,6 +138,8 @@ def mediaload(page, results_per_page):
     for index, post in enumerate(
             d.entries[
             (page - 1) * results_per_page:page * results_per_page + results_per_page]):
+        #print index, post
+
         if index >= 100:
             break
         # Here we set up a dictionary in order to extract selected data from the
@@ -168,16 +163,12 @@ def mediaload(page, results_per_page):
         max_height = 90
 
         for thumbnail in thumbnails:
-            print "INSIDE OUTTER IF"
             if 'height' in thumbnail:
-                print "INSIDE SECOND IF"
                 height = thumbnail['height']
                 if height == '90':
                     thumbnail_url = thumbnail['url']
 
-
         tags = post.media_keywords
-        print(tags)
 
         # -- For each video in the item dict
         for video in videos:
@@ -221,8 +212,6 @@ def mediaload(page, results_per_page):
     #video_package = {}
     for asset_dict in response_array:
         video_package = {}
-        print("THIS IS ASSET_DICT on line 100")
-        print(asset_dict)
         extract_sourcefile_tupe = asset_dict['url']
         extract_thumbnail_tupe = asset_dict['thumbnail']
         extract_videoID_tupe = asset_dict['videoID']
@@ -242,8 +231,6 @@ def mediaload(page, results_per_page):
         )
         
         asset_return_list.append(video_package)
-
-    print(asset_return_list)
 
     # send results to db
     #SearchResult.store(asset_return_list)

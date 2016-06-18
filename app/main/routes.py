@@ -306,7 +306,7 @@ def uploadsuccess():
 @main.route('/media', methods=['GET', 'POST'])
 @login_required
 def media():
-    # check for AJAX POST request to this endpoint from tag search Boostrap form on /media enpoint
+    # check for AJAX POST request to this endpoint from tag search Boostrap form on /media endpoint
     if request.method == "POST":
         print("POST CALLED!")
         try:
@@ -335,9 +335,16 @@ def media():
                 print("tag inside if len(:)")
                 print(tag_clean)
                 video_package = video_feed_parser.load(tag_clean, page, RESULTS_PER_PAGE)
+                print "THIS IS video_package: "
+                print(video_package)
+                print "video_package is a...."
                 print(type(video_package))
-                return render_template('media.html', video_package=video_package, tag=tag_clean)
- 
+                
+                #return render_template('media.html', video_package=video_package, tag=tag_clean)
+                #print(jsonify(response_dict=video_package))
+                return jsonify({'response_dict': video_package})
+                #return json.dumps({'RESPONSE': video_package})
+
             # AJAX in /media has to do what this return function does, load videofeed.html and feed parameters to that template 
             
         except Exception, e:
@@ -354,6 +361,17 @@ def media():
     # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
 
     return render_template('media.html', video_package=video_package, page=page)
+
+
+
+
+
+@main.route('/mediaTest', methods=['GET', 'POST'])
+def mediaTest():
+    return render_template('mediaTest.html')
+
+
+
 
 
 

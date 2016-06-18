@@ -46,10 +46,10 @@
     </nav>
 
 
+<div id="defaultMedia">
 <!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
-
-<div class="list-group" >
+<div class="list-group">
 	<a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}">
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
 		<img src={{ dict["thumbnail"] }} height="90" width="160">
@@ -59,7 +59,7 @@
 </div>
 
  {% endfor %}
-
+</div>
 
 
 
@@ -81,61 +81,75 @@
 
 	<div>
 
- <div class="list-group" id="foo"></div>
+<div id="footest"></div>
 
  </div>
 
-<script>
+ <script>
 var form;	
 form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
 
 	alert("event listener called");
 
-
-  var oOutput = document.querySelector("div"),
+  //var oOutput = document.querySelector("div");
 	  oData = new FormData(form);
-
-  alert(oData);
 
   var oReq = new XMLHttpRequest();
   
-  
+
   oReq.open("POST", "/media", true);
   oReq.onload = function(oEvent) {
-	  if (oReq.status == 200) {
+	  	if (oReq.status == 200) {
 		  //alert("200 status");
-	  var ovpResponse = oReq.responseText;
-		  alert(ovpResponse);
-		  //$('#result').html(ovpResponse);
+		//ovpResponse = oReq.responseText;
+		
+		var ovpResponse = JSON.parse(oReq.responseText);
+		
+		alert(ovpResponse);
+		var serverResponseBody = ovpResponse['response_dict'];
 
-	  $('defaultMedia').hide();
+		var vidInsert;
 
-		//window.location.replace("https://ovp-frontend-framework.herokuapp.com/uploadsuccess");
-      //oOutput.innerHTML = "Uploaded!";
-         //local dev:
-  		$('#foo').load('/mediaTest #foo', function( response, status, xhr  ) {
-			if ( oReq.status == "error"  ) { 
-			  var msg = "sorry"; 
-			  $( "#result" ).html( msg + oReq.status + " " + oReq.statusText  );  
-		  }
-		  else {
-			  $('#result').html(ovpResponse);
-		  }
-	  });
-	  
-	  
-	  } else {
-      oOutput.innerHTML = "Error " + oReq.status + " occurred when trying to upload your file.<br \/>";
-    }
-  };
+		vidInsert = document.querySelector("#footest");
+		
+		$("#defaultMedia").hide();
+		
+		for(i = 0; i < serverResponseBody.length; i++){
+			var vidPacket = JSON.stringify(serverResponseBody[i]);
+
+			var vidPacketMod = JSON.parse(vidPacket);
+			console.log(vidPacketMod);
+			console.log(vidPacketMod["description"]);
+
+			var idxID = i;
+			var desc = vidPacketMod["description"];
+			var name = vidPacketMod["name"];
+			var url = vidPacketMod['url'];
+
+			var div = document.createElement('div');
+
+			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+url+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+
+			vidInsert.appendChild(div);
+
+		};
+
+		//$('#footest').html(ovpResponse.response_dict);
+		
+	  }
+
+	  else {
+		  alert("oReq.status != 200");
+
+	  }
+  }
 
   oReq.send(oData);
   ev.preventDefault();
-}, false);
 
+}); 
 </script>
 
+{%endblock%}
 
-
-{% endblock %}
