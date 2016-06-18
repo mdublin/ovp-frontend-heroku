@@ -63,34 +63,14 @@
 
 
 
-<script>
-
-	var videopackage = 5;
-	var balls = document.querySelector("foo");
-	for (var i =0; videopackage.length; i++) {
-
-		newdiv = document.createElement('balls');
-	}
-	
-
-</script>
-
-
-
-
-
-	<div>
 
 <div id="footest"></div>
 
- </div>
 
  <script>
 var form;	
 form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
-
-	//alert("event listener called");
 
   //var oOutput = document.querySelector("div");
 	  oData = new FormData(form);
@@ -100,8 +80,9 @@ form.addEventListener('submit', function(ev) {
 
   oReq.open("POST", "/media", true);
   oReq.onload = function(oEvent) {
-	  	if (oReq.status == 200) {
-		  //alert("200 status");
+	  if (oReq.status == 200) {
+
+		//alert("200 status");
 		//ovpResponse = oReq.responseText;
 		
 		var ovpResponse = JSON.parse(oReq.responseText);
@@ -114,7 +95,10 @@ form.addEventListener('submit', function(ev) {
 		vidInsert = document.querySelector("#footest");
 		
 		$("#defaultMedia").hide();
-		
+
+		//clear the div for each new tag search request
+		document.getElementById("footest").innerHTML = "";
+
 		for(i = 0; i < serverResponseBody.length; i++){
 			var vidPacket = JSON.stringify(serverResponseBody[i]);
 
