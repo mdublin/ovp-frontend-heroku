@@ -53,6 +53,13 @@ def load(parser_input, page, results_per_page):
 
         max_bitrate = 0
         vid_url = None
+
+        # get thumbnail image URL 
+        thumbnails = post.media_thumbnail[0]
+        thumbnail_url = thumbnails['url']
+
+
+
         videos = post.media_content
         tags = post.media_keywords
 
@@ -76,8 +83,8 @@ def load(parser_input, page, results_per_page):
 
         item['tags'] = tags
         item['url'] = vid_url
+        item['thumbnail'] = thumbnail_url
         videoID = item['videoID']
-        # new line
         videoName = item['name']
         response_array.append(item)
 
@@ -97,6 +104,7 @@ def load(parser_input, page, results_per_page):
         video_package = {}
         extract_sourcefile_tupe = asset_dict['url']
         extract_videoID_tupe = asset_dict['videoID']
+        extract_thumbnail_tupe = asset_dict['thumbnail']        
         extract_name_tupe = asset_dict['name']
         extract_description_tupe = asset_dict['description']
         extract_tags_tupe = asset_dict['tags']
@@ -107,7 +115,8 @@ def load(parser_input, page, results_per_page):
                 'name': extract_name_tupe[0],
                 'description': extract_description_tupe[0],
                 'tags': extract_tags_tupe,
-                'url': extract_sourcefile_tupe})
+                'url': extract_sourcefile_tupe,
+            'thumbnail': extract_thumbnail_tupe})
         asset_return_list.append(video_package)
 
     # send results to db
@@ -157,16 +166,18 @@ def mediaload(page, results_per_page):
         videos = post.media_content
 
         # get thumbnail image URL 
-        thumbnails = post.media_thumbnail
-        print thumbnails
-        thumbnail_url = None
-        max_height = 90
-
-        for thumbnail in thumbnails:
-            if 'height' in thumbnail:
-                height = thumbnail['height']
-                if height == '90':
-                    thumbnail_url = thumbnail['url']
+        thumbnails = post.media_thumbnail[0]
+        thumbnail_url = thumbnails['url']
+        
+        #print thumbnails
+        #thumbnail_url = None
+        #max_height = 90
+        
+        #for thumbnail in thumbnails:
+        #    if 'height' in thumbnail:
+        #        height = thumbnail['height']
+        #        if height == '90':
+        #            thumbnail_url = thumbnail['url']
 
         tags = post.media_keywords
 
@@ -233,6 +244,6 @@ def mediaload(page, results_per_page):
         asset_return_list.append(video_package)
 
     # send results to db
-    #SearchResult.store(asset_return_list)
+    # SearchResult.store(asset_return_list)
 
     return asset_return_list 

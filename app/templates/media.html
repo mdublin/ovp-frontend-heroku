@@ -90,7 +90,7 @@ var form;
 form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
 
-	alert("event listener called");
+	//alert("event listener called");
 
   //var oOutput = document.querySelector("div");
 	  oData = new FormData(form);
@@ -106,7 +106,7 @@ form.addEventListener('submit', function(ev) {
 		
 		var ovpResponse = JSON.parse(oReq.responseText);
 		
-		alert(ovpResponse);
+		//alert(ovpResponse);
 		var serverResponseBody = ovpResponse['response_dict'];
 
 		var vidInsert;
@@ -118,6 +118,7 @@ form.addEventListener('submit', function(ev) {
 		for(i = 0; i < serverResponseBody.length; i++){
 			var vidPacket = JSON.stringify(serverResponseBody[i]);
 
+			// converting to JSON object so we can extract values of keys in each packet
 			var vidPacketMod = JSON.parse(vidPacket);
 			console.log(vidPacketMod);
 			console.log(vidPacketMod["description"]);
@@ -126,10 +127,11 @@ form.addEventListener('submit', function(ev) {
 			var desc = vidPacketMod["description"];
 			var name = vidPacketMod["name"];
 			var url = vidPacketMod['url'];
+			var thumbnail = vidPacketMod['thumbnail'];
 
 			var div = document.createElement('div');
 
-			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+url+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
 
 			vidInsert.appendChild(div);
 
