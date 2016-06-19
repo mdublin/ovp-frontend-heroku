@@ -101,11 +101,12 @@ function prevPage()
 function nextPage()
 {
 	alert("nextPage called!!!");
-	alert(currentTag);
-	for(i = 0; i < currentTag.length; i++){
-	  alert("INSIDE!");
-	  alert(currentTag[i]);
-  	}	
+
+	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+  	for(var pair of oData.entries()){
+	  alert(pair[0]+': '+ pair[1]);
+  	}
+	
 	if (current_page < numPages()) {
         current_page++;
         changePage(current_page);
@@ -188,12 +189,12 @@ form.addEventListener('submit', function(ev) {
 
   oReq.send(oData);
 
-  currentTag = oData.entries();
+  currentTag = oData;
 
   //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
-  for(var pair of oData.entries()){
-	  alert(pair[0]+': '+ pair[1]);
-  }
+  //for(var pair of oData.entries()){
+  //	  alert(pair[0]+': '+ pair[1]);
+  //}
 	  
   //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
   ev.preventDefault();
