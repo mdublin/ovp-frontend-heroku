@@ -121,7 +121,7 @@ def feed(user_tag):
     http://127.0.0.1:8000/feed/boxing?page=2
     But these urls are created via url_for() functions attached to the prev and
     next buttons in the videofeed.html template the url_for() functions
-    attached to the previous and next buttons are essentially creation a loop
+    attached to the previous and next buttons are essentially creating a loop
     wherein the user clicks, for example, the next button, then url_for()
     generates the url for main.feed, passing in the user_tag and page number
     (that is either incremented or decremented, for next and previous). Due to
@@ -359,7 +359,7 @@ def media():
     video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
 
     # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
-
+    print("ABOUT TO RENDER_TEMPLATE!!!!!!!!")
     return render_template('media.html', video_package=video_package, page=page)
 
 
@@ -440,5 +440,11 @@ def FormDataTest():
     
     return render_template('FormDataTest.html')
 
+
+
+
+@main.route('/paginationTest', methods=['GET', 'POST'])
+def paginationTest():
+    return render_template('paginationTest.html')
 
 

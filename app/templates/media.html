@@ -63,11 +63,66 @@
 
 
 
+<nav>
+	<ul class="pager">
+	{% if page > 1 %}
+	<li><input type="submit" value="Previous" onclick="return prevPage();" /></li>
+	{% endif %}
+	<li><input type="submit" value="Next" onclick="return nextPage();" /></li>
+	</ul>
+</nav>
 
+
+
+
+<!-- div for inserting tag query results --!>
 <div id="footest"></div>
 
 
- <script>
+
+
+<script>
+
+
+
+var currentTag;
+
+var current_page = 1;
+
+function prevPage()
+{
+	alert("prevPage called!!!");
+	if (current_page > 1) {
+        current_page--;
+        changePage(current_page);
+    }
+}
+
+function nextPage()
+{
+	alert("nextPage called!!!");
+	alert(currentTag);
+	for(i = 0; i < currentTag.length; i++){
+	  alert("INSIDE!");
+	  alert(currentTag[i]);
+  	}	
+	if (current_page < numPages()) {
+        current_page++;
+        changePage(current_page);
+    }
+}
+
+//document.querySelector("#btn_prev").prevPage();
+//document.querySelector("#btn_next").nextPage();
+
+//window.onload = function(){
+//	changePage(1);
+//};
+
+
+
+
+
 var form;	
 form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
@@ -132,6 +187,15 @@ form.addEventListener('submit', function(ev) {
   }
 
   oReq.send(oData);
+
+  currentTag = oData.entries();
+
+  //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+  for(var pair of oData.entries()){
+	  alert(pair[0]+': '+ pair[1]);
+  }
+	  
+  //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
   ev.preventDefault();
 
 }); 
