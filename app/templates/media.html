@@ -85,7 +85,7 @@
 
 
 
-var currentTag;
+var current_tag;
 
 var current_page = 1;
 
@@ -102,15 +102,90 @@ function nextPage()
 {
 	alert("nextPage called!!!");
 
-	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
-  	for(var pair of oData.entries()){
-	  alert(pair[0]+': '+ pair[1]);
-  	}
+
+
+	// page increment 
+	current_page = current_page + 1;
 	
+
+    // add page numbers to FormData object, using .set() instead of .append()
+	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
+	current_tag.set('page_number', current_page);
+
+
+	// https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+	// extracting tag from formData object
+	// for(var pair of oData.entries()){
+	//  alert(pair[0]+': '+ pair[1]);
+	//	current_tag = pair[1];
+	//}
+
+  	//var oData = new FormData(form);
+	
+
+	var oReq = new XMLHttpRequest();
+  
+
+  	oReq.open("POST", "/media", true);
+  	oReq.onload = function(oEvent) {
+		if (oReq.status == 200) {
+			alert("200 Response!");
+
+			var ovpResponse = JSON.parse(oReq.responseText);
+		
+		//alert(ovpResponse);
+		var serverResponseBody = ovpResponse['response_dict'];
+
+		var vidInsert;
+
+		vidInsert = document.querySelector("#footest");
+		
+		$("#defaultMedia").hide();
+
+		//clear the div for each new tag search request
+		document.getElementById("footest").innerHTML = "";
+
+		for(i = 0; i < serverResponseBody.length; i++){
+			var vidPacket = JSON.stringify(serverResponseBody[i]);
+
+			// converting to JSON object so we can extract values of keys in each packet
+			var vidPacketMod = JSON.parse(vidPacket);
+			console.log(vidPacketMod);
+			console.log(vidPacketMod["description"]);
+
+			var idxID = i;
+			var desc = vidPacketMod["description"];
+			var name = vidPacketMod["name"];
+			var url = vidPacketMod['url'];
+			var thumbnail = vidPacketMod['thumbnail'];
+
+			var div = document.createElement('div');
+
+			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+
+			vidInsert.appendChild(div);
+
+		};
+
+
+		}
+		else {
+			alert(oReq.status);
+
+		}
+	}
+
+	oReq.send(current_tag);
+
+  //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
+  //ev.preventDefault();
+
+
+	/*
 	if (current_page < numPages()) {
         current_page++;
         changePage(current_page);
-    }
+    }*/
 }
 
 //document.querySelector("#btn_prev").prevPage();
@@ -129,7 +204,7 @@ form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
 
   //var oOutput = document.querySelector("div");
-	  oData = new FormData(form);
+  var oData = new FormData(form);
 
   var oReq = new XMLHttpRequest();
   
@@ -143,7 +218,8 @@ form.addEventListener('submit', function(ev) {
 		
 		var ovpResponse = JSON.parse(oReq.responseText);
 		
-		//alert(ovpResponse);
+		alert(ovpResponse);
+		
 		var serverResponseBody = ovpResponse['response_dict'];
 
 		var vidInsert;
@@ -189,7 +265,7 @@ form.addEventListener('submit', function(ev) {
 
   oReq.send(oData);
 
-  currentTag = oData;
+  current_tag = oData;
 
   //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
   //for(var pair of oData.entries()){

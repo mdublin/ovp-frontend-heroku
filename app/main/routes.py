@@ -318,14 +318,25 @@ def media():
 
             # get value of 'tag' key, which are the tags submitted in the form
             tag_submission = tag_submission['tag'][0]
+
+            
+            if 'page_number' in tag_submission:
+            
+                page = tag_submission['page_number'][0]
+                page = int(page)
+            
+            else:
+
+                page = request.args.get('page', 1)
+                page = int(page)
             
             # clean up tag submission
             #parser_input = input_cleanup.input_prep(user_tag)
 
-            page = request.args.get('page', 1)
-            print("THIS IS page in feed(): %s" % page)
+            #page = request.args.get('page', 1)
+            #print("THIS IS page in feed(): %s" % page)
             #converting page from Unicode to int for passing to d.entries slice operation in load()
-            page = int(page)
+            #page = int(page)
             #sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
 
             # if tag_submission contains more than one tag, strip it out of list, get ride of commas, and change encoding from Unicode to regular string
