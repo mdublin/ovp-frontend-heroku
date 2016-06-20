@@ -13,7 +13,7 @@ from . import main
 from .forms import LoginForm, TagSearchForm, RegistrationForm
 from ..parser import video_feed_parser, input_cleanup
 
-RESULTS_PER_PAGE = 5
+RESULTS_PER_PAGE = 10
 
 # video upload handling
 from werkzeug import secure_filename
@@ -313,16 +313,16 @@ def media():
             print("THIS IS request.form")
             print request.form
             #get tags from ImmutableMultiDict
-            tag_submission = dict((key, request.form.getlist(key)) for key in request.form.keys())
-            print (tag_submission)
+            ajax_form_submit = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            print (ajax_form_submit)
 
             # get value of 'tag' key, which are the tags submitted in the form
-            tag_submission = tag_submission['tag'][0]
+            tag_submission = ajax_form_submit['tag'][0]
 
             
-            if 'page_number' in tag_submission:
-            
-                page = tag_submission['page_number'][0]
+            if 'page_number' in ajax_form_submit:
+                print "INSIDE page_number check!!!!" 
+                page = ajax_form_submit['page_number'][0]
                 page = int(page)
             
             else:
@@ -345,6 +345,12 @@ def media():
                 print("INSIDE len()")
                 print("tag inside if len(:)")
                 print(tag_clean)
+
+                print "CHECKING page and RESULTS_PER_PAGE arguments: "
+                print page
+                print RESULTS_PER_PAGE
+
+
                 video_package = video_feed_parser.load(tag_clean, page, RESULTS_PER_PAGE)
                 print "THIS IS video_package: "
                 print(video_package)
