@@ -46,6 +46,15 @@
     </nav>
 
 
+<nav>
+	<ul class="pager">
+		<li class="previous"><input type="submit" value="Previous" id="prevPage" onclick="return prevPage();"/></li>
+	<li class="next"><input type="submit" value="Next" id="nextPage" onclick="return nextPage();" /></li>
+	</ul>
+</nav>
+
+
+
 <div id="defaultMedia">
 <!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
@@ -53,25 +62,13 @@
 	<a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}">
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
 		<img src={{ dict["thumbnail"] }} height="90" width="160">
-	  	<p class="list-group-item-text">{{ dict["description"] }}</p>	
+		<p class="list-group-item-text">{{ dict["description"] }}</p>
    		<p class="list-group-item-text">Some info here</p>
 	</a>
 </div>
 
  {% endfor %}
 </div>
-
-
-
-<nav>
-	<ul class="pager">
-	{% if page > 1 %}
-	<li><input type="submit" value="Previous" onclick="return prevPage();" /></li>
-	{% endif %}
-	<li><input type="submit" value="Next" onclick="return nextPage();" /></li>
-	</ul>
-</nav>
-
 
 
 
@@ -84,54 +81,64 @@
 <script>
 
 
-
 var current_tag;
 
 var current_page = 1;
 
+var btn_prev = document.getElementById("#prevPage");
+var btn_next = document.getElementById("#nextPage");
+
+
+	function pagConfig(){
+		alert("TEST")
+
+		if (current_page == 1) {
+			alert("inside if");
+        	$('#prevPage').hide();
+			}
+		else{
+			$('#prevPage').show();
+
+		}
+	}
+  
+
+window.onload = function(){
+		pagConfig();
+};
+
+
+if(current_tag < 1){
+
+		$("#prevPage").hide();
+	}
+
+
 function prevPage()
 {
 	alert("prevPage called!!!");
-	if (current_page > 1) {
-        current_page--;
-        changePage(current_page);
-    }
-}
-
-function nextPage()
-{
-	alert("nextPage called!!!");
-
-
+	//if (current_page > 1) {
+    //    current_page--;
+    //    changePage(current_page);
+	//}
 
 	// page increment 
-	current_page = current_page + 1;
+	current_page = current_page - 1;
 	
-
     // add page numbers to FormData object, using .set() instead of .append()
 	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
 	current_tag.set('page_number', current_page);
 
-
 	// https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
-	// extracting tag from formData object
-	// for(var pair of oData.entries()){
-	//  alert(pair[0]+': '+ pair[1]);
-	//	current_tag = pair[1];
-	//}
-
-  	//var oData = new FormData(form);
 	
-
 	var oReq = new XMLHttpRequest();
   
-
   	oReq.open("POST", "/media", true);
   	oReq.onload = function(oEvent) {
 		if (oReq.status == 200) {
 			alert("200 Response!");
 
-			var ovpResponse = JSON.parse(oReq.responseText);
+		var ovpResponse = JSON.parse(oReq.responseText);
 		
 		//alert(ovpResponse);
 		var serverResponseBody = ovpResponse['response_dict'];
@@ -164,6 +171,83 @@ function nextPage()
 			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
 
 			vidInsert.appendChild(div);
+
+			//call pagConfig() to set up pagination buttons
+			pagConfig();
+
+		};
+
+
+		}
+		else {
+			alert(oReq.status);
+
+		}
+	}
+
+	oReq.send(current_tag);
+
+}
+
+
+
+
+function nextPage()
+{
+	alert("nextPage called!!!");
+
+	// page increment 
+	current_page = current_page + 1;
+	
+    // add page numbers to FormData object, using .set() instead of .append()
+	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
+	current_tag.set('page_number', current_page);
+
+	// https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
+	
+	var oReq = new XMLHttpRequest();
+  
+  	oReq.open("POST", "/media", true);
+  	oReq.onload = function(oEvent) {
+		if (oReq.status == 200) {
+			alert("200 Response!");
+
+		var ovpResponse = JSON.parse(oReq.responseText);
+		
+		//alert(ovpResponse);
+		var serverResponseBody = ovpResponse['response_dict'];
+
+		var vidInsert;
+
+		vidInsert = document.querySelector("#footest");
+		
+		$("#defaultMedia").hide();
+
+		//clear the div for each new tag search request
+		document.getElementById("footest").innerHTML = "";
+
+		for(i = 0; i < serverResponseBody.length; i++){
+			var vidPacket = JSON.stringify(serverResponseBody[i]);
+
+			// converting to JSON object so we can extract values of keys in each packet
+			var vidPacketMod = JSON.parse(vidPacket);
+			console.log(vidPacketMod);
+			console.log(vidPacketMod["description"]);
+
+			var idxID = i;
+			var desc = vidPacketMod["description"];
+			var name = vidPacketMod["name"];
+			var url = vidPacketMod['url'];
+			var thumbnail = vidPacketMod['thumbnail'];
+
+			var div = document.createElement('div');
+
+			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+
+			vidInsert.appendChild(div);
+
+			//call pagConfig() to set up pagination buttons
+			pagConfig();
 
 		};
 

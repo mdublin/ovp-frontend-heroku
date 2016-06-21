@@ -319,9 +319,8 @@ def media():
             # get value of 'tag' key, which are the tags submitted in the form
             tag_submission = ajax_form_submit['tag'][0]
 
-            
+            # checking for page_number in immutableMultiDict from AJAX POST
             if 'page_number' in ajax_form_submit:
-                print "INSIDE page_number check!!!!" 
                 page = ajax_form_submit['page_number'][0]
                 page = int(page)
             

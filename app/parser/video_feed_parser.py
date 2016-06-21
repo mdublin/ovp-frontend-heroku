@@ -166,8 +166,12 @@ def mediaload(page, results_per_page):
         videos = post.media_content
 
         # get thumbnail image URL 
-        thumbnails = post.media_thumbnail[0]
-        thumbnail_url = thumbnails['url']
+        
+        try:
+            thumbnails = post.media_thumbnail[0]
+            thumbnail_url = thumbnails['url']
+        except AttributeError:
+            thumbnail_url = None
         
         #print thumbnails
         #thumbnail_url = None
