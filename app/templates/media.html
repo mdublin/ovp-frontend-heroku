@@ -6,14 +6,17 @@
 
 
 {% block page_content %}
-
     
-    {% block styles %}
+
+{% block styles %}
     {{super()}}
     <link rel="stylesheet"
         href="{{url_for('static', filename='newstyle.css')}}">
     {% endblock %}
- 
+
+
+
+
     <h1>Search Media</h1>
 	<p>You are logged in as <b>{{ current_user.username }}</b>.</p>
 
@@ -46,12 +49,14 @@
     </nav>
 
 
-<nav>
-	<ul class="pager">
-		<li class="previous"><input type="submit" value="Previous" id="prevPage" onclick="return prevPage();"/></li>
-	<li class="next"><input type="submit" value="Next" id="nextPage" onclick="return nextPage();" /></li>
-	</ul>
+	<nav>
+<ul class="pager">
+
+	<li><button type="button" class="btn btn-primary-outline" input type="submit" id="prevPage" onclick="return prevPage();"/>Previous</button></li>
+	<li><button type="button" class="btn btn-primary" input type="submit" id="nextPage" onclick="return nextPage();" />Next</button></li>
+</ul>
 </nav>
+
 
 
 
