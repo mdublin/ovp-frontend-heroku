@@ -1,3 +1,11 @@
+
+
+This is a Flask-based frontend framework that acts as abstraction layer for a digital video publisher's OVP, like a Brightcove or Kaltura service. Typically, enterprise users of video hosting and streaming solutions need to provide very limited access to a large population of users. However, desipite user profile permissions restrictions, most OVP's cannot completely insulate valuable video assets, which in most scenarios are tracked, monetized, and assigned metadata, from the end user. 
+
+This abstraction layer uses Gunicorn and PostgreSQL, and is configured for Heroku deployment with easy integration into AWS S3.
+
+Getting Started:
+
 To start gunicorn server locally you need to swap out the configuration in wsgi.py to "production" instead of "production_heroku".
 
 Then run: 

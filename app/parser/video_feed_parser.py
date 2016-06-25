@@ -165,6 +165,10 @@ def mediaload(page, results_per_page):
         vid_url = None
         videos = post.media_content
 
+        #try:
+        #    videos = post.media_content
+        #except AttributeError:
+        #    print("post.media_content is throwing an AttributeError...probably for no reason. Keep refreshing the page or restart the server.")
         # get thumbnail image URL 
         
         try:

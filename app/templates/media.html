@@ -15,7 +15,7 @@
     {% endblock %}
 
 
-
+	<script src="{{ url_for('static', filename='clipboardJS/clipboard.min.js') }}"></script>
 
     <h1>Search Media</h1>
 	<p>You are logged in as <b>{{ current_user.username }}</b>.</p>
@@ -60,6 +60,7 @@
 
 
 
+
 <div id="defaultMedia">
 <!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
@@ -83,6 +84,9 @@
 
 
 
+
+
+
 <script>
 
 
@@ -94,13 +98,14 @@ var btn_prev = document.getElementById("#prevPage");
 var btn_next = document.getElementById("#nextPage");
 
 
+//pagination config check for initial search query results load
 	function pagConfig(){
-		alert("TEST")
 
 		if (current_page == 1) {
-			alert("inside if");
+
         	$('#prevPage').hide();
 			}
+		
 		else{
 			$('#prevPage').show();
 
@@ -121,11 +126,6 @@ if(current_tag < 1){
 
 function prevPage()
 {
-	alert("prevPage called!!!");
-	//if (current_page > 1) {
-    //    current_page--;
-    //    changePage(current_page);
-	//}
 
 	// page increment 
 	current_page = current_page - 1;
@@ -151,12 +151,25 @@ function prevPage()
 		var vidInsert;
 
 		vidInsert = document.querySelector("#footest");
-		
+
 		$("#defaultMedia").hide();
 
 		//clear the div for each new tag search request
 		document.getElementById("footest").innerHTML = "";
 
+        var vidPacket = JSON.stringify(serverResponseBody);
+
+		var vidPacketMod = JSON.parse(vidPacket);
+		var div = document.createElement('div');
+			
+		div.innerHTML += '<div id="defaultMediaTest">{% for dict in '+vidPacketMod+' %}<div class="list-group"><a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}"><h4 class="list-group-item-heading">{{ dict }}</h4><img src={{ dict["thumbnail"] }} height="90" width="160"><p class="list-group-item-text">{{ dict["description"] }}</p><p class="list-group-item-text">Some info here</p></a></div>{% endfor %}</div>';
+
+
+		vidInsert.appendChild(div);
+
+		alert(div.innerHTML);
+
+		/*
 		for(i = 0; i < serverResponseBody.length; i++){
 			var vidPacket = JSON.stringify(serverResponseBody[i]);
 
@@ -169,18 +182,21 @@ function prevPage()
 			var desc = vidPacketMod["description"];
 			var name = vidPacketMod["name"];
 			var url = vidPacketMod['url'];
-			var thumbnail = vidPacketMod['thumbnail'];
+		 	var thumbnail = vidPacketMod['thumbnail'];
 
 			var div = document.createElement('div');
 
-			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+			div.innerHTML += '<div id="jumbo-resize"><class="modal fade"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">Modal title</h4></div><div class="modal-body"><p>One fine body&hellip;</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary">Save changes</button></div></div></div></div></div>';
+
+			//div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal--'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal--'+idxID+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel--'+idxID+'">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION: </b>'+desc+'</p><p><b>TAGS: </b>'+ tags+'</p><data-clipboard-text='+desc+'><button class="btn" data-clipboard-target="#myModalLabel--'+idxID+'">Copy Source File Url</button></div><script src="/static/clipboardJS/clipboard.min.js"><\/script><script>var btn = document.getElementById("btn"); var clipboard = new Clipboard("btn"); clipboard.on("success", function(e) { console.log(e); }); clipboard.on("error", function(e) { console.log(e);});<\/script></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div></div>';
+
 
 			vidInsert.appendChild(div);
 
 			//call pagConfig() to set up pagination buttons
 			pagConfig();
 
-		};
+		}; */
 
 
 		}
@@ -199,7 +215,6 @@ function prevPage()
 
 function nextPage()
 {
-	alert("nextPage called!!!");
 
 	// page increment 
 	current_page = current_page + 1;
@@ -215,7 +230,7 @@ function nextPage()
   	oReq.open("POST", "/media", true);
   	oReq.onload = function(oEvent) {
 		if (oReq.status == 200) {
-			alert("200 Response!");
+			//alert("200 Response!");
 
 		var ovpResponse = JSON.parse(oReq.responseText);
 		
@@ -231,6 +246,7 @@ function nextPage()
 		//clear the div for each new tag search request
 		document.getElementById("footest").innerHTML = "";
 
+		
 		for(i = 0; i < serverResponseBody.length; i++){
 			var vidPacket = JSON.stringify(serverResponseBody[i]);
 
@@ -244,20 +260,38 @@ function nextPage()
 			var name = vidPacketMod["name"];
 			var url = vidPacketMod['url'];
 			var thumbnail = vidPacketMod['thumbnail'];
+			var tags = vidPacketMod['tags'];
 
 			var div = document.createElement('div');
 
-			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+			div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Video Title</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+
+
+		//div.innerHTML = '<div class="jumbotron container" id="'+idxID+'"><div class="container"><h1>'+name+'</h1><p>"'+desc+'"</p><p><a class="btn btn-primary btn-lg" href="#" role="button">Get Asset Info</a></p></div></div>';
+			
 
 			vidInsert.appendChild(div);
+
+			console.log($('.btn').length);
 
 			//call pagConfig() to set up pagination buttons
 			pagConfig();
 
 		};
 
+		new Clipboard('.btn-clipboard', {
+			text: function(trigger) {
+				alert(trigger.getAttribute('data-clipboard-text'));
+    			return trigger.getAttribute('data-clipboard-text');
+			}
+		});
 
+		//var clipboard = new Clipboard(".btn"); 
+		//clipboard.on("success", function(e) { console.log(e); }); 
+		//clipboard.on("error", function(e) { console.log(e); });
+		
 		}
+		
 		else {
 			alert(oReq.status);
 
@@ -268,22 +302,9 @@ function nextPage()
 
   //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
   //ev.preventDefault();
+ 
 
-
-	/*
-	if (current_page < numPages()) {
-        current_page++;
-        changePage(current_page);
-    }*/
 }
-
-//document.querySelector("#btn_prev").prevPage();
-//document.querySelector("#btn_next").nextPage();
-
-//window.onload = function(){
-//	changePage(1);
-//};
-
 
 
 
@@ -307,7 +328,7 @@ form.addEventListener('submit', function(ev) {
 		
 		var ovpResponse = JSON.parse(oReq.responseText);
 		
-		alert(ovpResponse);
+		//alert(ovpResponse);
 		
 		var serverResponseBody = ovpResponse['response_dict'];
 
@@ -367,5 +388,5 @@ form.addEventListener('submit', function(ev) {
 }); 
 </script>
 
-{%endblock%}
+{% endblock %}
 
