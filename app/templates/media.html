@@ -40,22 +40,8 @@
 
 
 
- <!-- this is the pagination just for the general media load on /media --!>
-	   <nav>
-		<ul class="pager">
-		{% if page > 1 %}
-		<li><a href="{{ url_for('main.media', page=(page - 1)) }}"><b>Previous</b></a></li>
-        {% endif %}
-		<li><a href="{{ url_for('main.media', page=(page + 1)) }}"><b>Next</b></a></li>
-      </ul>
-    </nav>
-
-
-
-
-
-
-	<nav>
+<!-- pagination via AJAX --!>
+<nav>
 <ul class="pager">
 
 	<li><button type="button" class="btn btn-primary" input type="submit" id="prevPage" onclick="return prevPage();"/>Previous</button></li>
@@ -70,8 +56,7 @@
 <div id="defaultMedia">
 <!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
-<div class="list-group">
-	<a href="http://127.0.0.1:8000/" class="list-group-item active" id="mediaItem--{{loop.index}}">
+<div class="list-group" id="mediaItem--{{loop.index}}">
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
 		<img src={{ dict["thumbnail"] }} height="90" width="160">
 		<p class="list-group-item-text">{{ dict["description"] }}</p>
@@ -345,7 +330,6 @@ function nextPage()
 		}
 	}
 		
-	alert(tag_submission);
 	oReq.send(tag_submission);
 
   //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
@@ -406,7 +390,7 @@ form.addEventListener('submit', function(ev) {
 
 			var div = document.createElement('div');
 
-			div.innerHTML += '<div class="list-group" id='+idxID+' ><a href='+url+' class="list-group-item active"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></a></div>';
+			div.innerHTML += '<div class="list-group" id='+idxID+' ><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></div>';
 
 			vidInsert.appendChild(div);
 
@@ -424,11 +408,7 @@ form.addEventListener('submit', function(ev) {
 
   oReq.send(oData);
 
-
-  
   tag_submission = oData;
-
-  alert(tag_submission);
 
   //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
   //for(var pair of oData.entries()){
