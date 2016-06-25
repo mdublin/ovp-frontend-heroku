@@ -38,7 +38,9 @@
   <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
 </form>
 
-	   <!-- this is the pagination just for the general media load on /media --!>
+
+
+ <!-- this is the pagination just for the general media load on /media --!>
 	   <nav>
 		<ul class="pager">
 		{% if page > 1 %}
@@ -47,6 +49,10 @@
 		<li><a href="{{ url_for('main.media', page=(page + 1)) }}"><b>Next</b></a></li>
       </ul>
     </nav>
+
+
+
+
 
 
 	<nav>
@@ -89,8 +95,26 @@
 
 <script>
 
+/* notes on this AJAX tag-query/pagination process:
 
-var current_tag;
+   Upon tag submission, AJAX catches POST request to /media endpoint. First submission only, the ImmutableMultiDict received by endpoint only has the tag, no page number, so it looks like this:
+   ImmutableMultiDict([('tag', u'mma')])
+
+   But when users starts user Next and Previous buttons, that's when prevPage() and nextPage() functions are called, and current_page is incremented or decremented accordingly. With tag_submission.set(), we are attaching as a key/value pair 'page_number' and current_page value to the ImmutableMultiDict object via tag_submission (which is actually oData object, it's assigned to tag_submission at end of initial XHR POST function at end of inital tag submit), so that a pagination POST request with a tag look like this: 
+
+   ImmutableMultiDict([('tag', u'mma'), ('page_number', u'2')])
+
+***Remember we will have the tag that was originally submitted stored in oData/current_tag as long as the user stays on the page so that the JS processess remain stateful.*** 
+
+The feed parser script slices the mrss response accordingly using the page_number, which is returned to AJAX as a response packaged as   return jsonify({'response_dict': video_package})   in the /media endpoint.
+
+Regarding default media load pagination (i.e. no tag submission, just most recent assets ordered via DESC) via AJAX:
+
+Keep in mind, the initial GET request to load this page is technically loading page 1 of the feed parsed with no tags, in others, just the most recent assets in the feed. So, when the user is clicking Next button, the next page is page 2. So that POST request to load the next set of assets is sending just the page number to the endpoint. 
+
+*/
+
+var tag_submission;
 
 var current_page = 1;
 
@@ -117,8 +141,8 @@ window.onload = function(){
 		pagConfig();
 };
 
-
-if(current_tag < 1){
+// if current page number is less than or 1, hide previous page button
+if(current_page <= 1){
 
 		$("#prevPage").hide();
 	}
@@ -134,7 +158,7 @@ function prevPage()
 	
     // add page numbers to FormData object, using .set() instead of .append()
 	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
-	current_tag.set('page_number', current_page);
+	tag_submission.set('page_number', current_page);
 
 var oReq = new XMLHttpRequest();
   
@@ -212,7 +236,7 @@ var oReq = new XMLHttpRequest();
 		}
 	}
 
-	oReq.send(current_tag);
+	oReq.send(tag_submission);
 
   //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
   //ev.preventDefault();
@@ -228,12 +252,20 @@ var oReq = new XMLHttpRequest();
 function nextPage()
 {
 
+	// checking state of tag_submission, because when user is clicking pagination buttons with default media load (no tag was submitted), we have to instantiate tag_submission from scratch as a new, empty FormData object (remember that in the tag submission scenario, at end of that first POST AJAX request, tag_submission is assigned value of oData after oData ImmutableMultiDict object is sent to Flask endpoint)
+// we only need to do this once in nextPage() not prevPage() because first time on page load, only Next button is available, after that, the below code instantiates tag_submission so it's available to prevPage() when that button is displayed at page 2
+	if (typeof tag_submission === "undefined") {
+		console.log("tag_submission is undefined, assigning empty FormData object as value so we can add current_page value");
+  	    tag_submission = new FormData(form);
+		
+	}
+
 	// page increment 
 	current_page = current_page + 1;
-	
+
     // add page numbers to FormData object, using .set() instead of .append()
 	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
-	current_tag.set('page_number', current_page);
+	tag_submission.set('page_number', current_page);
 
 	// https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
 	
@@ -312,8 +344,9 @@ function nextPage()
 
 		}
 	}
-
-	oReq.send(current_tag);
+		
+	alert(tag_submission);
+	oReq.send(tag_submission);
 
   //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
   //ev.preventDefault();
@@ -329,6 +362,7 @@ form = document.forms.namedItem("bootform");
 form.addEventListener('submit', function(ev) {
 
   //var oOutput = document.querySelector("div");
+  // oData is the [object FormData] object, which contains tag from form submit, and is what's POST'ed to Flask /media endpoint
   var oData = new FormData(form);
 
   var oReq = new XMLHttpRequest();
@@ -390,7 +424,11 @@ form.addEventListener('submit', function(ev) {
 
   oReq.send(oData);
 
-  current_tag = oData;
+
+  
+  tag_submission = oData;
+
+  alert(tag_submission);
 
   //https://developer.mozilla.org/en-US/docs/Web/API/FormData/entries
   //for(var pair of oData.entries()){

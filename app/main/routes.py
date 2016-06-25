@@ -316,6 +316,17 @@ def media():
             ajax_form_submit = dict((key, request.form.getlist(key)) for key in request.form.keys())
             print (ajax_form_submit)
 
+
+            #for pagination with default mediaload, no tag submission
+            if 'tag' not in ajax_form_submit:
+                #return just sliced list from
+                page = ajax_form_submit['page_number'][0]
+                page = int(page)
+                video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
+                return jsonify({'response_dict': video_package})
+                
+                
+
             # get value of 'tag' key, which are the tags submitted in the form
             tag_submission = ajax_form_submit['tag'][0]
 
@@ -325,7 +336,6 @@ def media():
                 page = int(page)
             
             else:
-
                 page = request.args.get('page', 1)
                 page = int(page)
             
