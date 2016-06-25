@@ -264,11 +264,9 @@ function nextPage()
 
 			var div = document.createElement('div');
 
+			// using index of loop to create unique elements with each innerHTML insertion
+
 			div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Video Title</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
-
-
-		//div.innerHTML = '<div class="jumbotron container" id="'+idxID+'"><div class="container"><h1>'+name+'</h1><p>"'+desc+'"</p><p><a class="btn btn-primary btn-lg" href="#" role="button">Get Asset Info</a></p></div></div>';
-			
 
 			vidInsert.appendChild(div);
 
@@ -279,13 +277,17 @@ function nextPage()
 
 		};
 
+			// creating Clipboard.js function one time, after innerHTML loads all the blobs into the DOM. 
+			// this uses Clipboard.js "imperative API", see here under Advanced Usage: https://clipboardjs.com/
+
 		new Clipboard('.btn-clipboard', {
 			text: function(trigger) {
-				alert(trigger.getAttribute('data-clipboard-text'));
+				//alert(trigger.getAttribute('data-clipboard-text'));
     			return trigger.getAttribute('data-clipboard-text');
 			}
 		});
 
+		// older version/alternative way of instantiaing clipboard.js to catch buttons
 		//var clipboard = new Clipboard(".btn"); 
 		//clipboard.on("success", function(e) { console.log(e); }); 
 		//clipboard.on("error", function(e) { console.log(e); });
