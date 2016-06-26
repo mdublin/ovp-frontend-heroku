@@ -52,20 +52,60 @@
 
 
 
-
 <div id="defaultMedia">
 <!-- loop through video_package object for general load on /media --!>
 {% for dict in video_package %}
 <div class="list-group" id="mediaItem--{{loop.index}}">
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
-		<img src={{ dict["thumbnail"] }} height="90" width="160">
+		<img src={{ dict["thumbnail"] }} height="120" width="190">
 		<p class="list-group-item-text">{{ dict["description"] }}</p>
-   		<p class="list-group-item-text">Some info here</p>
+		<p class="list-group-item-text">Some info here</p>
+		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-{{loop.index}}">Get Asset Data</button>
 	</a>
+</div>
+<div class="modal fade" id="myModal-{{loop.index}}" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" type=
+                "button">&times;</button>
+                <h4 class="modal-title">{{ dict["name"] }}</h4>
+            </div> 
+            <div class="modal-body">
+                <p><b>DESCRIPTION:</b> {{ dict["description"] }}</p>
+                <p><b>TAGS:</b> {{ dict["tags"] }}</p><button class="btn btn-clipboard"
+                data-clipboard-text={{ dict["url"] }}>Copy Source File Url</button>
+		</div>
+		<!-- clipboard.js --!>
+		<script>
+               var clipboard = new Clipboard('.btn');
+
+               clipboard.on('success', function(e) {
+                   console.log(e);
+               });
+               clipboard.on('error', function(e) {
+                   console.log(e);
+               });
+        </script>
+               <!-- END of clipboard.js button for video source file URL --!> 
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
  {% endfor %}
 </div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -229,10 +269,6 @@ var oReq = new XMLHttpRequest();
 
 }	
 
-
-
-
-
 // AJAX for Next button
 function nextPage()
 {
@@ -383,20 +419,25 @@ form.addEventListener('submit', function(ev) {
 			console.log(vidPacketMod["description"]);
 
 			var idxID = i;
+				
+			// extracting values from feed asset objects 
 			var desc = vidPacketMod["description"];
 			var name = vidPacketMod["name"];
 			var url = vidPacketMod['url'];
 			var thumbnail = vidPacketMod['thumbnail'];
+			var tags = vidPacketMod['tags'];
+			
 
 			var div = document.createElement('div');
 
-			div.innerHTML += '<div class="list-group" id='+idxID+' ><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></div>';
+			//div.innerHTML += '<div class="list-group" id='+idxID+' ><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></div>';
+
+		div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
 
 			vidInsert.appendChild(div);
 
 		};
 
-		//$('#footest').html(ovpResponse.response_dict);
 		
 	  }
 
