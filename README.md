@@ -9,7 +9,10 @@ Getting Started:
 To start gunicorn server locally you need to swap out the configuration in wsgi.py to "production" instead of "production_heroku".
 
 Then run: 
-$ gunicorn app.wsgi:application --log-level debug
+$ gunicorn app.wsgi:application
+
+For errorhandler() to work, have to set Debug=False in the config files. Also, for Gunicorn, drop the '--log-level debug' from $ gunicorn app.wsgi:application --log-level debug command. The full command would be used locally in dev environment. 
+
 
 (Leaving run.py file in case you want to use Flask server instead of Gunicorn)
 
@@ -35,6 +38,8 @@ The other way to get the actual repository that's used for the app is to git clo
 
 For local dev, sometimes port gets stuck -- to find offending port:
     $ lsof -n -i4TCP:8000 | grep LISTEN
+
+
 
 
 

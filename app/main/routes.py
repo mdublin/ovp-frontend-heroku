@@ -23,12 +23,23 @@ from flask import current_app as application
 
 
 
-# error handling
+# error handling
+# for errorhandler() to work, have to set Debug=False in the config files. Also, for Gunicorn, drop the '--log-level debug' from $ gunicorn app.wsgi:application --log-level debug 
 
+# Page not found error 
 @main.app_errorhandler(404)
 def page_not_found(e):
     print("THIS IS BEING CALLED")
     return render_template('404.html'), 404
+
+# Internal server error
+@main.app_errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 404
+
+
+
+
 
 # LOGIN
 
@@ -306,9 +317,11 @@ def media():
             #for pagination with default mediaload, no tag submission
             if 'tag' not in ajax_form_submit:
                 #return just sliced list from
+                print("INSIDE IF!!!!!!!!!")
                 page = ajax_form_submit['page_number'][0]
                 page = int(page)
                 video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
+
                 return jsonify({'response_dict': video_package})
                 
                 
@@ -362,17 +375,17 @@ def media():
         except Exception, e:
             print e
  
+    else:
+        page = request.args.get('page', 1)
+        #converting page from Unicode to int for passing to d.entries slice operation in load()
+        page = int(page)
     
-    page = request.args.get('page', 1)
-    #converting page from Unicode to int for passing to d.entries slice operation in load()
-    page = int(page)
-    
-    # sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
-    video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
+        # sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
+        video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
 
-    # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
-    print("ABOUT TO RENDER_TEMPLATE!!!!!!!!")
-    return render_template('media.html', video_package=video_package, page=page)
+        # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
+        print("ABOUT TO RENDER_TEMPLATE!!!!!!!!")
+        return render_template('media.html', video_package=video_package, page=page)
 
 
 

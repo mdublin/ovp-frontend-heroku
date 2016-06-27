@@ -134,6 +134,12 @@ def mediaload(page, results_per_page):
 
     d = feedparser.parse(video_feed)
 
+    # checking feed for any errors (i.e. "bozo" errors: https://pythonhosted.org/feedparser/bozo.html#advanced-bozo), bozo_exception will still exist in the parse response, but it's value would be 
+    
+    if 'bozo_exception' in d:
+        print 'bozo_exception', d['bozo_exception']
+        return d['bozo_exception']
+    
     response_array = []
 
     # list returned of dicts for each video, this will be sent to, and
@@ -250,8 +256,5 @@ def mediaload(page, results_per_page):
         )
         
         asset_return_list.append(video_package)
-
-    # send results to db
-    # SearchResult.store(asset_return_list)
-
+    
     return asset_return_list 

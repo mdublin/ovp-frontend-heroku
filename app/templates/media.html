@@ -276,11 +276,15 @@ function nextPage()
 
 	// checking state of tag_submission, because when user is clicking pagination buttons with default media load (no tag was submitted), we have to instantiate tag_submission from scratch as a new, empty FormData object (remember that in the tag submission scenario, at end of that first POST AJAX request, tag_submission is assigned value of oData after oData ImmutableMultiDict object is sent to Flask endpoint)
 // we only need to do this once in nextPage() not prevPage() because first time on page load, only Next button is available, after that, the below code instantiates tag_submission so it's available to prevPage() when that button is displayed at page 2
+
 	if (typeof tag_submission === "undefined") {
 		console.log("tag_submission is undefined, assigning empty FormData object as value so we can add current_page value");
-  	    tag_submission = new FormData(form);
+		// just creating a blank FormData object, no tag key, so we just set page_number further down
+		tag_submission = new FormData();
 		
 	}
+
+
 
 	// page increment 
 	current_page = current_page + 1;
