@@ -22,6 +22,14 @@ import os
 from flask import current_app as application
 
 
+
+# error handling
+
+@main.app_errorhandler(404)
+def page_not_found(e):
+    print("THIS IS BEING CALLED")
+    return render_template('404.html'), 404
+
 # LOGIN
 
 @main.route('/login', methods=['GET', 'POST'])
@@ -89,24 +97,6 @@ def AJAXtest():
         print(request.form['username'])
         return (request.form['username'])
     return "GET method called"
-
-
-#@main.route('/videosearch', methods=['GET', 'POST'])
-#@login_required
-#def videosearch():
-#    tagform = TagSearchForm()
-
-#    if tagform.validate_on_submit():
-#        user_tag = tagform.tag.data
-#        parser_input = input_cleanup.input_prep(user_tag)
-#        video_package = video_feed_parser.load(parser_input)
-#        # send video_package to search result db
-#        # return render_template('videofeed.html', video_package=video_package)
-        
-#        # delete entries in db after pages are created? delete entries after user session is done?
-
-
-#    return render_template('videosearch.html', tagform=tagform)
 
 
 
@@ -238,7 +228,6 @@ def uploaded_file(filename):
 
 # new video upload w/AJAX
 
-
 from ..ovpAPI.DI import BC
 from ..ovpAPI.DI import uploader
 from ..ovpAPI import AWS_S3_test
@@ -258,9 +247,6 @@ def videoupload():
             print request.form
             video_meta_data = dict((key, request.form.getlist(key)) for key in request.form.keys())
             videofile = request.files['file_attach']
-            # send video metadata to uploader.py 
-            #video_meta_data = uploader.meta_parser(data)
-           #print(video_meta_data)
 
             if videofile and allowed_file(videofile.filename):
                 filename = secure_filename(videofile.filename)
@@ -465,8 +451,6 @@ def FormDataTest():
             print e
     
     return render_template('FormDataTest.html')
-
-
 
 
 @main.route('/paginationTest', methods=['GET', 'POST'])

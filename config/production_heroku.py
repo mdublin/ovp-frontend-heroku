@@ -22,3 +22,8 @@ ALLOWED_EXTENSIONS = set(['mov', 'mp4', 'mpeg', 'mpg', 'flv', 'avi'])
 MAX_CONTENT_LENGTH = 900 * 1024 * 1024
 #MAX_CONTENT_LENGTH = os.environ["MAX_CONTENT_LENGTH"]
 
+
+# if you're trying to serve Bootstrap locally from within app vs CDN, set this to True.
+# https://pythonhosted.org/Flask-Bootstrap/configuration.html
+#
+#BOOTSTRAP_SERVE_LOCAP = True

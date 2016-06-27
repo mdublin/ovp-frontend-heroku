@@ -3,8 +3,7 @@ import psycopg2
 import urlparse
 
 ADMINS = ['admin@test.com']
-#DEBUG = False
-DEBUG = True
+DEBUG = False
 SECRET_KEY = 'top secret!'
 
 

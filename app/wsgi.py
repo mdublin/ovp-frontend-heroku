@@ -30,4 +30,3 @@ print(application)
 
 application.add_files('/path/to/more/static/files', prefix='more-files/')
 
-
