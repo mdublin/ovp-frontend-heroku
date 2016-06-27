@@ -11,7 +11,7 @@ To start gunicorn server locally you need to swap out the configuration in wsgi.
 Then run: 
 $ gunicorn app.wsgi:application
 
-For errorhandler() to work, have to set Debug=False in the config files. Also, for Gunicorn, drop the '--log-level debug' from $ gunicorn app.wsgi:application --log-level debug command. The full command would be used locally in dev environment. 
+For errorhandler() to work, have to set Debug=False in the config files. Also, for Gunicorn, drop the '--log-level debug' from $ gunicorn app.wsgi:application --log-level debug command. The full command would be used locally in dev environment. In Flask, if you set Debug=True, it re-routes all the errors to the console, so the builtin errorhandler that's used to display custom error pages in routes.py via render_template doesn't work. 
 
 
 (Leaving run.py file in case you want to use Flask server instead of Gunicorn)
