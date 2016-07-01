@@ -2,7 +2,7 @@ import os
 import urlparse
 
 ADMINS = ['admin@test.com']
-DEBUG = False
+DEBUG = True
 SECRET_KEY = 'top secret!'
 
 

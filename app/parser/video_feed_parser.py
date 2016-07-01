@@ -169,14 +169,39 @@ def mediaload(page, results_per_page):
 
         max_bitrate = 0
         vid_url = None
-        videos = post.media_content
+        #videos = post.media_content
 
-        #try:
-        #    videos = post.media_content
-        #except AttributeError:
+        # trying to deal with this errory that only occurs occasionally for reasons yet not known:
+        # feedparser.py", line 400, in __getattr__ raise AttributeError, "object has no attribute '%s'" % key AttributeError: object has no attribute 'media_content'
+
+        try:
+            videos = post.media_content
+            
+            # -- For each video in the item dict
+            for video in videos:
+            # -- If the video has a value for its bitrate
+                if 'bitrate' in video:
+                # -- Extract the value of this video's bitrate
+                    bitrate_str = video['bitrate']
+        # -- and convert it to an integer (by default it is a string in the XML)
+                    curr_bitrate = int(bitrate_str)
+            # -- If the bitrate of this video is greater than
+            # -- the highest bitrate we've seen, mark this video as the one with
+            # -- the highest birate.
+                    if curr_bitrate > max_bitrate:
+                        max_bitrate = curr_bitrate
+                    vid_url = video['url']
+        # -- This line simply prints out the maximum bitrate and current video URL for each iteration
+        # print "{} url {}".format(max_bitrate, vid_url)
+        # print "highest bitrate {} url {}".format(max_bitrate, vid_url)
+
+        except AttributeError:
         #    print("post.media_content is throwing an AttributeError...probably for no reason. Keep refreshing the page or restart the server.")
-        # get thumbnail image URL 
+            videos = "http://127.0.0.1:8000/"
+            vid_url = videos
         
+
+        # get thumbnail image URL 
         try:
             thumbnails = post.media_thumbnail[0]
             thumbnail_url = thumbnails['url']
@@ -195,6 +220,7 @@ def mediaload(page, results_per_page):
 
         tags = post.media_keywords
 
+        '''
         # -- For each video in the item dict
         for video in videos:
             # -- If the video has a value for its bitrate
@@ -212,6 +238,7 @@ def mediaload(page, results_per_page):
         # -- This line simply prints out the maximum bitrate and current video URL for each iteration
         # print "{} url {}".format(max_bitrate, vid_url)
         # print "highest bitrate {} url {}".format(max_bitrate, vid_url)
+        '''
 
 
         item['tags'] = tags
