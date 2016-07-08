@@ -46,6 +46,80 @@
 
 
 
+
+
+
+<style>
+     iframe {
+     width: 640px;
+     height: 360px;
+     }
+     </style>
+
+
+	 <div id="playerContainer"></div>
+    
+	 
+	 <div id="placeHolder">
+		 <button onclick="addPlayer()">Add Player</button>
+	 </div>
+	 
+	 
+	 <div id="closeButton">
+		 <button onclick="closePlayer()">Close Player</button>	 
+	 </div>
+
+
+
+
+
+     <!-- custom script -->
+    <script type="text/JavaScript">
+        var myPlayer,
+        playerHTML,
+        playerData = {
+            'accountId' : '1752604059001',
+            'playerId' : '04ee9f58-9d08-43ea-803f-abda86776db2',
+            'videoId' : '4172255216001'
+        };
+    
+    
+	function addPlayer() {
+		document.getElementById('playerContainer').innerHTML = '<div id=\"dynamicPlayerInsert\"></div>';
+        // dynamically build the player video elemeint
+        playerHTML = '<iframe src=\"//players.brightcove.net/' + playerData.accountId + '/' + playerData.playerId + '_default/index.html?videoId=' + playerData.videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>';
+        
+        // inject the player code into the DOM
+	document.getElementById('dynamicPlayerInsert').innerHTML = playerHTML;
+	$('#placeHolder').hide();
+	$('#closeButton').show();
+
+	};
+
+	function closePlayer() {
+		console.log("hello");
+		$("#dynamicPlayerInsert").remove();
+		$('#placeHolder').show();
+		$('#closeButton').hide();
+	};
+	
+    </script>
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- pagination via AJAX --!>
 <nav>
 <ul class="pager">
@@ -479,4 +553,5 @@ form.addEventListener('submit', function(ev) {
 </script>
 
 {% endblock %}
+
 

@@ -38,9 +38,6 @@ def internal_server_error(e):
     return render_template('500.html'), 404
 
 
-
-
-
 # LOGIN
 
 @main.route('/login', methods=['GET', 'POST'])
@@ -395,6 +392,97 @@ def media():
 def mediaTest():
     return render_template('mediaTest.html')
 
+
+
+
+
+
+@main.route('/dynamicPlayerLoad', methods=['GET', 'POST'])
+@login_required
+def dynamicPlayerLoad():
+    # check for AJAX POST request to this endpoint from tag search Boostrap form on /media endpoint
+    if request.method == "POST":
+        print("POST CALLED!")
+        try:
+            print("THIS IS request.form")
+            print request.form
+            #get tags from ImmutableMultiDict
+            ajax_form_submit = dict((key, request.form.getlist(key)) for key in request.form.keys())
+            print (ajax_form_submit)
+
+
+            #for pagination with default mediaload, no tag submission
+            if 'tag' not in ajax_form_submit:
+                #return just sliced list from
+                print("INSIDE IF!!!!!!!!!")
+                page = ajax_form_submit['page_number'][0]
+                page = int(page)
+                video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
+
+                return jsonify({'response_dict': video_package})
+                
+                
+
+            # get value of 'tag' key, which are the tags submitted in the form
+            tag_submission = ajax_form_submit['tag'][0]
+
+            # checking for page_number in immutableMultiDict from AJAX POST
+            if 'page_number' in ajax_form_submit:
+                page = ajax_form_submit['page_number'][0]
+                page = int(page)
+            
+            else:
+                page = request.args.get('page', 1)
+                page = int(page)
+            
+            # clean up tag submission
+            #parser_input = input_cleanup.input_prep(user_tag)
+
+            #page = request.args.get('page', 1)
+            #print("THIS IS page in feed(): %s" % page)
+            #converting page from Unicode to int for passing to d.entries slice operation in load()
+            #page = int(page)
+            #sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
+
+            # if tag_submission contains more than one tag, strip it out of list, get ride of commas, and change encoding from Unicode to regular string
+            tag_clean = [str(x.strip()) for x in tag_submission.split(',')]
+            if len(tag_clean) == 1:
+                print("INSIDE len()")
+                print("tag inside if len(:)")
+                print(tag_clean)
+
+                print "CHECKING page and RESULTS_PER_PAGE arguments: "
+                print page
+                print RESULTS_PER_PAGE
+
+
+                video_package = video_feed_parser.load(tag_clean, page, RESULTS_PER_PAGE)
+                print "THIS IS video_package: "
+                print(video_package)
+                print "video_package is a...."
+                print(type(video_package))
+                
+                #return render_template('media.html', video_package=video_package, tag=tag_clean)
+                #print(jsonify(response_dict=video_package))
+                return jsonify({'response_dict': video_package})
+                #return json.dumps({'RESPONSE': video_package})
+
+            # AJAX in /media has to do what this return function does, load videofeed.html and feed parameters to that template 
+            
+        except Exception, e:
+            print e
+ 
+    else:
+        page = request.args.get('page', 1)
+        #converting page from Unicode to int for passing to d.entries slice operation in load()
+        page = int(page)
+    
+        # sending user submitted tag to ovp API link, as well as page and RESULTS_PER_PAGE values for slicing response from API link
+        video_package = video_feed_parser.mediaload(page, RESULTS_PER_PAGE)
+
+        # this is rendering the videofeed.html template but still at the /protected URL. Can send POST data (the user submitted tag) via redirect to /videofeed endpoint?
+        print("ABOUT TO RENDER_TEMPLATE!!!!!!!!")
+        return render_template('dynamicPlayerLoad.html', video_package=video_package, page=page)
 
 
 
