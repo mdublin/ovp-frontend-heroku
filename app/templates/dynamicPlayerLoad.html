@@ -138,6 +138,7 @@
 		<p class="list-group-item-text">{{ dict["description"] }}</p>
 		<p class="list-group-item-text"></p>
 		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-{{loop.index}}">Get Asset Data</button>
+		<button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button>
 	</a>
 </div>
 <div class="modal fade" id="myModal-{{loop.index}}" role="dialog">
@@ -414,12 +415,9 @@ function nextPage()
 
 			// using index of loop to create unique elements with each innerHTML insertion
 
-			div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+		div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
 		
-			//div.innerHTML += '<p>"'+name+'"</p><div class="embed-responsive embed-responsive-16by9"><div style="display:none"><script language="JavaScript" type="text/javascript" src="http://admin.brightcove.com/js/BrightcoveExperiences.js"><\/script><object id="myExperience" class="BrightcoveExperience"><param name="bgcolor" value="#FFFFFF" /><param name="width" value="480" /><param name="height" value="270" /><param name="playerID" value="4239069402001" /><param name="playerKey" value="AQ~~,AAAABvaL8JE~,ufBHq_I6FnwfOMZXBanuA9ZRv9kTOlTe" /><param name="isVid" value="true" /><param name="isUI" value="true" /><param name="dynamicStreaming" value="true" /><param name="@videoPlayer" value="'+videoID+'"/></object></div>';
-
-
-
+			
 			vidInsert.appendChild(div);
 
 			console.log($('.btn').length);
