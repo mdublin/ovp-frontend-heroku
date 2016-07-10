@@ -46,6 +46,33 @@
 
 
 
+
+
+
+	<style>
+     iframe {
+     width: 640px;
+     height: 360px;
+     }
+     </style>
+
+
+	 <!-- <div id="playerContainer"></div> --!>
+    
+	
+    
+    
+
+
+
+
+
+
+
+
+
+
+
 <!-- pagination via AJAX --!>
 <nav>
 <ul class="pager">
@@ -65,8 +92,9 @@
 		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
 		<img src={{ dict["thumbnail"] }} height="120" width="190">
 		<p class="list-group-item-text">{{ dict["description"] }}</p>
-		<p class="list-group-item-text">Some info here</p>
+		<p class="list-group-item-text"></p>
 		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-{{loop.index}}">Get Asset Data</button>
+		<button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button>
 	</a>
 </div>
 <div class="modal fade" id="myModal-{{loop.index}}" role="dialog">
@@ -228,14 +256,34 @@ var oReq = new XMLHttpRequest();
 			var url = vidPacketMod['url'];
 			var thumbnail = vidPacketMod['thumbnail'];
 			var tags = vidPacketMod['tags'];
+			var videoID = vidPacketMod['videoID'];
 
 			var div = document.createElement('div');
 
 			// using index of loop to create unique elements with each innerHTML insertion
 
-			div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
-
+			div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+		
 			vidInsert.appendChild(div);
+
+
+			// setting up the dynamic Brightcove player's insertion into the DOM	
+			var script; 
+			script = document.createElement("script");
+			script.type  = "text/javascript";
+			
+			// this glob of JS contains the functions for the addPlayer and closePlayer buttons as well as the iframe
+			// containing the dynamically loaded Brightcove player. It's also using the index of the loop via idxID to create unique variables
+			// https://docs.brightcove.com/en/video-cloud/brightcove-player/samples/load-player-dynamically.html
+			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
+			//document.body.appendChild(script);
+		    //inserting the script.text into playerContainer divs created in above div.innerHTML	
+			var playerContainerDivID = "#playerContainer--"+idxID+"";
+
+		    var playerContainer = document.querySelector(playerContainerDivID);
+			playerContainer.appendChild(script);
+
+
 
 			console.log($('.btn').length);
 
@@ -343,13 +391,28 @@ function nextPage()
 
 			// using index of loop to create unique elements with each innerHTML insertion
 
-			div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+		    div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
 		
-			//div.innerHTML += '<p>"'+name+'"</p><div class="embed-responsive embed-responsive-16by9"><div style="display:none"><script language="JavaScript" type="text/javascript" src="http://admin.brightcove.com/js/BrightcoveExperiences.js"><\/script><object id="myExperience" class="BrightcoveExperience"><param name="bgcolor" value="#FFFFFF" /><param name="width" value="480" /><param name="height" value="270" /><param name="playerID" value="4239069402001" /><param name="playerKey" value="AQ~~,AAAABvaL8JE~,ufBHq_I6FnwfOMZXBanuA9ZRv9kTOlTe" /><param name="isVid" value="true" /><param name="isUI" value="true" /><param name="dynamicStreaming" value="true" /><param name="@videoPlayer" value="'+videoID+'"/></object></div>';
-
-
-
 			vidInsert.appendChild(div);
+
+
+			// setting up the dynamic Brightcove player's insertion into the DOM	
+			var script; 
+			script = document.createElement("script");
+			script.type  = "text/javascript";
+			
+			// this glob of JS contains the functions for the addPlayer and closePlayer buttons as well as the iframe
+			// containing the dynamically loaded Brightcove player. It's also using the index of the loop via idxID to create unique variables
+			// https://docs.brightcove.com/en/video-cloud/brightcove-player/samples/load-player-dynamically.html
+			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
+			//document.body.appendChild(script);
+		    //inserting the script.text into playerContainer divs created in above div.innerHTML
+			var playerContainerDivID = "#playerContainer--"+idxID+"";
+
+		    var playerContainer = document.querySelector(playerContainerDivID);
+			playerContainer.appendChild(script);
+			// end of dynamic player insertion 
+
 
 			console.log($('.btn').length);
 
@@ -441,16 +504,33 @@ form.addEventListener('submit', function(ev) {
 			var name = vidPacketMod["name"];
 			var url = vidPacketMod['url'];
 			var thumbnail = vidPacketMod['thumbnail'];
-			var tags = vidPacketMod['tags'];
-			
+			var tags = vidPacketMod['tags'];	
+			var videoID = vidPacketMod['videoID'];
 
 			var div = document.createElement('div');
 
-			//div.innerHTML += '<div class="list-group" id='+idxID+' ><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="90" width="160"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p></div>';
-
-		div.innerHTML += '<div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text">Some info here</p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
-
+			div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+		
 			vidInsert.appendChild(div);
+
+
+			// setting up the dynamic Brightcove player's insertion into the DOM	
+			var script; 
+			script = document.createElement("script");
+			script.type  = "text/javascript";
+			
+			// this glob of JS contains the functions for the addPlayer and closePlayer buttons as well as the iframe
+			// containing the dynamically loaded Brightcove player. It's also using the index of the loop via idxID to create unique variables
+			// https://docs.brightcove.com/en/video-cloud/brightcove-player/samples/load-player-dynamically.html
+			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
+			//document.body.appendChild(script);
+		    //inserting the script.text into playerContainer divs created in above div.innerHTML	
+			var playerContainerDivID = "#playerContainer--"+idxID+"";
+
+		    var playerContainer = document.querySelector(playerContainerDivID);
+			playerContainer.appendChild(script);
+			// end of dynamic player insertion 
+
 
 		};
 
@@ -458,7 +538,8 @@ form.addEventListener('submit', function(ev) {
 	  }
 
 	  else {
-		  alert("oReq.status != 200");
+		  //alert("oReq.status != 200");
+		  alert("Looks like there is a problem with Brightcove, please wait a moment and try again.")
 
 	  }
   }
@@ -479,4 +560,5 @@ form.addEventListener('submit', function(ev) {
 </script>
 
 {% endblock %}
+
 

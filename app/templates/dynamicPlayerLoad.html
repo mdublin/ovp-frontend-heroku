@@ -44,11 +44,6 @@
 </form>
 
 
-
-
-
-
-
 	<style>
      iframe {
      width: 640px;
@@ -57,22 +52,7 @@
      </style>
 
 
-	 <!-- <div id="playerContainer"></div> --!>
     
-	
-    
-    
-
-
-
-
-
-
-
-
-
-
-
 <!-- pagination via AJAX --!>
 <nav>
 <ul class="pager">
@@ -83,74 +63,22 @@
 </nav>
 
 
+<script>
 
+// This replaces the Jinja2 loop that loaded the page upon first GET request: upon initial page load, 
+// this calls nextPage to load and sets current_page to 1 again instead of incrementing it to 2 for first Next click.
+// passing a string to nextPage() for this instead of using function.caller inside nextPage() to return the function that invoked the specified function.
+	$(document).ready(function(){
+		var initialPageLoad = "GET";
+		nextPage(initialPageLoad);
+	});
 
-<div id="defaultMedia">
-<!-- loop through video_package object for general load on /media --!>
-{% for dict in video_package %}
-<div class="list-group" id="mediaItem--{{loop.index}}">
-		<h4 class="list-group-item-heading">{{ dict["name"] }}</h4>
-		<img src={{ dict["thumbnail"] }} height="120" width="190">
-		<p class="list-group-item-text">{{ dict["description"] }}</p>
-		<p class="list-group-item-text"></p>
-		<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-{{loop.index}}">Get Asset Data</button>
-		<button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button>
-	</a>
-</div>
-<div class="modal fade" id="myModal-{{loop.index}}" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal" type=
-                "button">&times;</button>
-                <h4 class="modal-title">{{ dict["name"] }}</h4>
-            </div> 
-            <div class="modal-body">
-                <p><b>DESCRIPTION:</b> {{ dict["description"] }}</p>
-                <p><b>TAGS:</b> {{ dict["tags"] }}</p><button class="btn btn-clipboard"
-                data-clipboard-text={{ dict["url"] }}>Copy Source File Url</button>
-		</div>
-		<!-- clipboard.js --!>
-		<script>
-               var clipboard = new Clipboard('.btn');
-
-               clipboard.on('success', function(e) {
-                   console.log(e);
-               });
-               clipboard.on('error', function(e) {
-                   console.log(e);
-               });
-        </script>
-               <!-- END of clipboard.js button for video source file URL --!> 
-            <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
- {% endfor %}
-</div>
-
-
-
-
-
-
-
-
-
+</script>
 
 
 
 <!-- div for inserting tag query results --!>
 <div id="footest"></div>
-
-
-
-
-
 
 
 <script>
@@ -210,8 +138,7 @@ if(current_page <= 1){
 
 
 //AJAX for Previous button
-function prevPage()
-{
+function prevPage() {
 
 	// page increment 
 	current_page = current_page - 1;
@@ -220,10 +147,13 @@ function prevPage()
 	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
 	tag_submission.set('page_number', current_page);
 
-var oReq = new XMLHttpRequest();
+	var oReq = new XMLHttpRequest();
   
   	oReq.open("POST", "/media", true);
-  	oReq.onload = function(oEvent) {
+
+	oReq.send(tag_submission);
+
+	oReq.onload = function(oEvent) {
 		if (oReq.status == 200) {
 			//alert("200 Response!");
 
@@ -262,12 +192,12 @@ var oReq = new XMLHttpRequest();
 
 			// using index of loop to create unique elements with each innerHTML insertion
 
-			div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"><button id="addButton--'+idxID+'" onclick="addPlayer'+idxID+'()">Add Player</button></div><div id="closeButton"><button id="closeButton--'+idxID+'" onclick="closePlayer'+idxID+'()">Close Player</button></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+			div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
 		
 			vidInsert.appendChild(div);
 
 
-			// setting up the Dynamic Brightcove player's insertion into the DOM	
+			// setting up the dynamic Brightcove player's insertion into the DOM	
 			var script; 
 			script = document.createElement("script");
 			script.type  = "text/javascript";
@@ -275,8 +205,9 @@ var oReq = new XMLHttpRequest();
 			// this glob of JS contains the functions for the addPlayer and closePlayer buttons as well as the iframe
 			// containing the dynamically loaded Brightcove player. It's also using the index of the loop via idxID to create unique variables
 			// https://docs.brightcove.com/en/video-cloud/brightcove-player/samples/load-player-dynamically.html
-			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
-				//document.body.appendChild(script);
+			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
+			//document.body.appendChild(script);
+		    //inserting the script.text into playerContainer divs created in above div.innerHTML	
 			var playerContainerDivID = "#playerContainer--"+idxID+"";
 
 		    var playerContainer = document.querySelector(playerContainerDivID);
@@ -315,7 +246,7 @@ var oReq = new XMLHttpRequest();
 		}
 	}
 
-	oReq.send(tag_submission);
+	//oReq.send(tag_submission);
 
   //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
   //ev.preventDefault();
@@ -324,8 +255,14 @@ var oReq = new XMLHttpRequest();
 }	
 
 // AJAX for Next button
-function nextPage()
-{
+function nextPage(initialPageLoad) {
+
+	if (initialPageLoad === "GET"){
+		current_page = 1;
+	} else {
+		current_page = current_page + 1;
+	};
+
 
 	// checking state of tag_submission, because when user is clicking pagination buttons with default media load (no tag was submitted), we have to instantiate tag_submission from scratch as a new, empty FormData object (remember that in the tag submission scenario, at end of that first POST AJAX request, tag_submission is assigned value of oData after oData ImmutableMultiDict object is sent to Flask endpoint)
 // we only need to do this once in nextPage() not prevPage() because first time on page load, only Next button is available, after that, the below code instantiates tag_submission so it's available to prevPage() when that button is displayed at page 2
@@ -340,7 +277,7 @@ function nextPage()
 
 
 	// page increment 
-	current_page = current_page + 1;
+	//current_page = current_page + 1;
 
     // add page numbers to FormData object, using .set() instead of .append()
 	//https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
@@ -351,7 +288,10 @@ function nextPage()
 	var oReq = new XMLHttpRequest();
   
   	oReq.open("POST", "/media", true);
-  	oReq.onload = function(oEvent) {
+
+	oReq.send(tag_submission);
+	
+	oReq.onload = function(oEvent) {
 		if (oReq.status == 200) {
 			//alert("200 Response!");
 
@@ -390,7 +330,7 @@ function nextPage()
 
 			// using index of loop to create unique elements with each innerHTML insertion
 
-		    div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"><button id="addButton--'+idxID+'" onclick="addPlayer'+idxID+'()">Add Player</button></div><div id="closeButton"><button id="closeButton--'+idxID+'" onclick="closePlayer'+idxID+'()">Close Player</button></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+		    div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
 		
 			vidInsert.appendChild(div);
 
@@ -403,8 +343,9 @@ function nextPage()
 			// this glob of JS contains the functions for the addPlayer and closePlayer buttons as well as the iframe
 			// containing the dynamically loaded Brightcove player. It's also using the index of the loop via idxID to create unique variables
 			// https://docs.brightcove.com/en/video-cloud/brightcove-player/samples/load-player-dynamically.html
-		script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
-				//document.body.appendChild(script);
+			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
+			//document.body.appendChild(script);
+		    //inserting the script.text into playerContainer divs created in above div.innerHTML
 			var playerContainerDivID = "#playerContainer--"+idxID+"";
 
 		    var playerContainer = document.querySelector(playerContainerDivID);
@@ -443,11 +384,7 @@ function nextPage()
 		}
 	}
 		
-	oReq.send(tag_submission);
-
-  //When you use preventDefault(), you prevent the form from undergoing a traditional POST where your page would be submitted and reloaded. 
-  //ev.preventDefault();
- 
+	//oReq.send(tag_submission); 
 
 }
 
@@ -507,7 +444,7 @@ form.addEventListener('submit', function(ev) {
 
 			var div = document.createElement('div');
 
-			div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"><button id="addButton--'+idxID+'" onclick="addPlayer'+idxID+'()">Add Player</button></div><div id="closeButton"><button id="closeButton--'+idxID+'" onclick="closePlayer'+idxID+'()">Close Player</button></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+			div.innerHTML += '<div id="playerContainer--'+idxID+'"></div><div id="placeHolder--'+idxID+'"></div><div class="list-group" id="'+idxID+'"><h4 class="list-group-item-heading">'+name+'</h4><img src='+thumbnail+' height="120" width="190"><p class="list-group-item-text">'+desc+'</p><p class="list-group-item-text"></p><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal-'+idxID+'">Get Asset Data</button><button type="button" class="btn btn-success" id="#playerButton-'+idxID+'" onclick="addPlayer'+idxID+'()">Play</button><div class="modal fade" id="myModal-'+idxID+'" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">'+name+'</h4></div><div class="modal-body"><p><b>DESCRIPTION:</b> '+desc+'</p><p><b>TAGS:</b> '+tags+'</p><button class="btn btn-clipboard" data-clipboard-text='+url+'>Copy Source File Url</button></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
 		
 			vidInsert.appendChild(div);
 
@@ -520,8 +457,9 @@ form.addEventListener('submit', function(ev) {
 			// this glob of JS contains the functions for the addPlayer and closePlayer buttons as well as the iframe
 			// containing the dynamically loaded Brightcove player. It's also using the index of the loop via idxID to create unique variables
 			// https://docs.brightcove.com/en/video-cloud/brightcove-player/samples/load-player-dynamically.html
-			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
-				//document.body.appendChild(script);
+			script.text  = "var myPlayer"+idxID+", playerHTML"+idxID+", playerData"+idxID+" = {'accountId' : '29906170001', 'playerId' : 'rJFkizR8', 'videoId' : '"+videoID+"'}; function addPlayer"+idxID+"() { console.log('THIS IS RUNNING, no: "+idxID+"'); document.getElementById('playerContainer--"+idxID+"').innerHTML = '<div id=\"dynamicPlayerInsert--"+idxID+"\"></div>'; playerHTML"+idxID+" = '<iframe src=\"//players.brightcove.net/' + playerData"+idxID+".accountId + '/' + playerData"+idxID+".playerId + '_default/index.html?videoId=' + playerData"+idxID+".videoId + '\"' + ' allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><br><button type=\"button\" id=\"closeButton"+idxID+"\" class=\"btn btn-danger\" onclick=\"closePlayer"+idxID+"()\">Close</button></br>'; document.getElementById('dynamicPlayerInsert--"+idxID+"').innerHTML = playerHTML"+idxID+"; $('#placeHolder').hide(); $('#closeButton').show(); }; function closePlayer"+idxID+"() { $('#dynamicPlayerInsert--"+idxID+"').remove(); $('#placeHolder').show(); $('#closeButton').hide(); };"               // use this for inline script
+			//document.body.appendChild(script);
+		    //inserting the script.text into playerContainer divs created in above div.innerHTML	
 			var playerContainerDivID = "#playerContainer--"+idxID+"";
 
 		    var playerContainer = document.querySelector(playerContainerDivID);
@@ -535,7 +473,8 @@ form.addEventListener('submit', function(ev) {
 	  }
 
 	  else {
-		  alert("oReq.status != 200");
+		  //alert("oReq.status != 200");
+		  alert("Looks like there is a problem with Brightcove, please wait a moment and try again.")
 
 	  }
   }
